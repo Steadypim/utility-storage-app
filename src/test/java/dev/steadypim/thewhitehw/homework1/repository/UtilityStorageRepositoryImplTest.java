@@ -36,40 +36,52 @@ class UtilityStorageRepositoryImplTest {
 
     @Test
     void testFindById() {
+        //Arrange
         int existingId = 1;
 
+        //Act
         UtilityRecord actualRecord = repository.findByIdOrNull(existingId);
 
+        //Assert
         assertNotNull(actualRecord);
         assertEquals(actualRecord, firstRecord);
     }
 
     @Test
     void testFindByNonExistingId() {
+        //Arrange
         int nonExistingId = 4;
 
+        //Act
         UtilityRecord actualRecord = repository.findByIdOrNull(nonExistingId);
 
+        //Assert
         assertNull(actualRecord);
     }
 
     @Test
     void testFindAllByNameCaseInsensitive() {
+        //Arrange
         String existingName = "Test 1";
 
+        //Act
         List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName);
 
+        //Assert
         assertEquals(records.size(), 2);
-        for (UtilityRecord record : records) {
-            assertTrue(record.name().toLowerCase().contains(existingName.toLowerCase()));
-        }
+        assertTrue(records.contains(firstRecord));
+        assertTrue(records.contains(secondRecord));
     }
 
     @Test
     void testFindAllByNonExistingNameCaseInsensitive() {
+        //Arrange
         String nonExistingName = "nonExisting";
+
+        //Act
         List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName);
 
+        //Assert
         assertNotNull(records);
         assertTrue(records.isEmpty());
     }

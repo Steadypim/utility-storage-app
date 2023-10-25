@@ -8,11 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class UtilityStorageTest {
     @Test
     void testLoadedDataNotNull() {
+        //Arrange
         String filePath = "src/test/java/dev/steadypim/thewhitehw/homework1/test.json";
-
         UtilityStorage utilityStorage = new UtilityStorage(filePath);
+
+        //Act
         UtilityRecord record = utilityStorage.storage().get(1);
 
+        //Assert
         assertFalse(utilityStorage.storage().isEmpty());
 
         assertEquals(1, record.id());
