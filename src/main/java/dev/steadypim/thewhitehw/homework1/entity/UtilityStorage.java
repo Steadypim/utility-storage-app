@@ -14,10 +14,6 @@ public record UtilityStorage(Map<Integer, UtilityRecord> storage){
         this(UtilityStorage.loadRecordsFromFile(filePath));
     }
 
-    public UtilityStorage() {
-        this(new HashMap<>());
-    }
-
     private static Map<Integer, UtilityRecord> loadRecordsFromFile(String filePath) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
