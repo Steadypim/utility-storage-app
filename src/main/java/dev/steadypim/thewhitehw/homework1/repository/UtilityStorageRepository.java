@@ -8,6 +8,6 @@ import java.util.List;
  * Репозиторий для работы с данными в UtilityStorage
  */
 public interface UtilityStorageRepository {
-    UtilityRecord findById(int id);
+    UtilityRecord findByIdOrNull(int id);
     List<UtilityRecord> findAllByNameCaseInsensitive(String name);
 }

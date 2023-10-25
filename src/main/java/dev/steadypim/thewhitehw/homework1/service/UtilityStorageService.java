@@ -18,7 +18,7 @@ public class UtilityStorageService {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the record id: ");
         int id = scanner.nextInt();
-        UtilityRecord record = storage.findById(id);
+        UtilityRecord record = storage.findByIdOrNull(id);
         if (record != null) {
             System.out.println(record);
         } else {

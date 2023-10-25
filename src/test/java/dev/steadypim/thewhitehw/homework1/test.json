@@ -4,17 +4,5 @@
     "name": "test 1",
     "description": "test description 1",
     "link": "https://test.com/1"
-  },
-  {
-    "id": 2,
-    "name": "test 1",
-    "description": "test description 2",
-    "link": "https://test.com/2"
-  },
-  {
-    "id": 3,
-    "name": "test 3",
-    "description": "test description 3",
-    "link": "https://test.com/3"
   }
 ]

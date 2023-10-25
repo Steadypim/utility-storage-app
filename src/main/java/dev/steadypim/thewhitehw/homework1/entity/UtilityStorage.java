@@ -13,6 +13,11 @@ public record UtilityStorage(Map<Integer, UtilityRecord> storage){
     public UtilityStorage(String filePath) {
         this(UtilityStorage.loadRecordsFromFile(filePath));
     }
+
+    public UtilityStorage() {
+        this(new HashMap<>());
+    }
+
     private static Map<Integer, UtilityRecord> loadRecordsFromFile(String filePath) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -24,9 +29,9 @@ public record UtilityStorage(Map<Integer, UtilityRecord> storage){
             }
             return storage;
         } catch (IOException e) {
-            System.out.println("catch: " + e.getMessage());
+            System.out.println("Ошибка при считывании записей из файла, catch: " + e.getMessage());
             e.printStackTrace();
             return new HashMap<>();
-        }// TODO: ObjectMapper не требует явного закрытия, поэтому finally не нужен, или что туда написать?
+        }
     }
 }

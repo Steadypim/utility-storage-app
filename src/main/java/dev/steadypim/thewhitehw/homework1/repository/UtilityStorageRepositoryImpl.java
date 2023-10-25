@@ -14,18 +14,16 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     }
 
     @Override
-    public UtilityRecord findById(int id) {
+    public UtilityRecord findByIdOrNull(int id) {
         return utilityStorage.storage().get(id);
-//todo        return Optional.ofNullable(utilityStorage.storage().get(id))
-//                .orElseThrow(() -> new RuntimeException("No such record with id: " + id));
-//                мб так можно сделать, но тогда приложение завершается, а не возвращается в меню к в ТЗ
     }
 
     @Override
     public List<UtilityRecord> findAllByNameCaseInsensitive(String name) {
+        String lowerCaseName = name.toLowerCase();
         return utilityStorage.storage().values().stream()
                 .filter(record -> record.name().toLowerCase()
-                        .contains(name.toLowerCase()))
+                        .contains(lowerCaseName))
                 .collect(Collectors.toList());
     }
 }

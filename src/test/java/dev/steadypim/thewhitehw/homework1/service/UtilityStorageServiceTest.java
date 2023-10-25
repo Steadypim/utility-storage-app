@@ -42,7 +42,7 @@ class UtilityStorageServiceTest {
         // Arrange
         int id = 1;
         UtilityRecord record = new UtilityRecord(id, "Test Record", "Description", "Link");
-        when(mockRepository.findById(id)).thenReturn(record);
+        when(mockRepository.findByIdOrNull(id)).thenReturn(record);
 
         // Redirect System.out to capture console output
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -58,18 +58,18 @@ class UtilityStorageServiceTest {
         storageService.displayRecordById();
 
         // Assert
-        String expectedOutput = "Enter the record id: " + record + System.lineSeparator(); //todo не понял как пофиксить строки, чтобы не писать "Enter the record id: "
+        String expectedOutput = "Enter the record id: " + record + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
 
         // Verify that the repository method was called
-        verify(mockRepository, times(1)).findById(id);
+        verify(mockRepository, times(1)).findByIdOrNull(id);
     }
 
     @Test
     public void testDisplayRecordById_nonExistingRecord() {
         // Arrange
         int id = 1;
-        when(mockRepository.findById(id)).thenReturn(null);
+        when(mockRepository.findByIdOrNull(id)).thenReturn(null);
 
         // Redirect System.out to capture console output
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -85,11 +85,11 @@ class UtilityStorageServiceTest {
         storageService.displayRecordById();
 
         // Assert
-        String expectedOutput = "Enter the record id: No such record with id: " + id + System.lineSeparator();//todo тут тоже
+        String expectedOutput = "Enter the record id: No such record with id: " + id + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
 
         // Verify that the repository method was called
-        verify(mockRepository, times(1)).findById(id);
+        verify(mockRepository, times(1)).findByIdOrNull(id);
     }
 
     @Test
@@ -120,7 +120,7 @@ class UtilityStorageServiceTest {
         }
 
 
-        assertEquals("Enter the name (case-insensitive): " + expectedOutput, outputStream.toString());//todo и тут
+        assertEquals("Enter the name (case-insensitive): " + expectedOutput, outputStream.toString());
 
         // Verify that the repository method was called
         verify(mockRepository, times(1)).findAllByNameCaseInsensitive(name);
@@ -146,7 +146,7 @@ class UtilityStorageServiceTest {
         storageService.displayRecordsByName();
 
         // Assert
-        String expectedOutput = "Enter the name (case-insensitive): No matching records found." + System.lineSeparator();//todo Или так тоже норм?)
+        String expectedOutput = "Enter the name (case-insensitive): No matching records found." + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
 
         // Verify that the repository method was called
