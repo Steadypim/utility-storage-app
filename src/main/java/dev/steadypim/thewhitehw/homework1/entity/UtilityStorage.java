@@ -2,6 +2,9 @@ package dev.steadypim.thewhitehw.homework1.entity;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,9 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record UtilityStorage(Map<Integer, UtilityRecord> storage){
+/**
+ * Хранилище записей
+ */
+@Component
+@NoArgsConstructor
+@Data
+public class UtilityStorage{ //Todo - решил не юзать builder т.к в классе одно поле
+
+    private Map<Integer, UtilityRecord> storage;
     public UtilityStorage(String filePath) {
-        this(UtilityStorage.loadRecordsFromFile(filePath));
+        this.storage = loadRecordsFromFile(filePath);
     }
 
     private static Map<Integer, UtilityRecord> loadRecordsFromFile(String filePath) {
@@ -21,7 +32,7 @@ public record UtilityStorage(Map<Integer, UtilityRecord> storage){
             });
             Map<Integer, UtilityRecord> storage = new HashMap<>();
             for (UtilityRecord record : records) {
-                storage.put(record.id(), record);
+                storage.put(record.getId(), record);
             }
             return storage;
         } catch (IOException e) {
@@ -29,5 +40,12 @@ public record UtilityStorage(Map<Integer, UtilityRecord> storage){
             e.printStackTrace();
             return new HashMap<>();
         }
+    }
+
+    //Todo - добавил, чтобы подтянуть данные после создания бина, как передать во время создания не понял.
+    // Если передаю во время создания в конструкторе "this.utilityStorage = new UtilityStorage(dataFilePath)", то ловлю NPE.
+    // Как сделать правильно?
+    public void updateFilePath(String newFilePath){
+        this.storage = loadRecordsFromFile(newFilePath);
     }
 }

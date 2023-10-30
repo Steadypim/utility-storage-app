@@ -3,14 +3,20 @@ package dev.steadypim.thewhitehw.homework1.service;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepository;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
+import lombok.NonNull;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Сервис хранилища
+ */
+@Service
 public class UtilityStorageService {
     private final UtilityStorageRepository storage;
 
-    public UtilityStorageService(UtilityStorageRepositoryImpl storage) {
+    public UtilityStorageService(@NonNull UtilityStorageRepositoryImpl storage) {
         this.storage = storage;
     }
 
@@ -31,10 +37,15 @@ public class UtilityStorageService {
         System.out.print("Enter the name (case-insensitive): ");
         String name = scanner.nextLine();
         List<UtilityRecord> records = storage.findAllByNameCaseInsensitive(name);
-        if (!records.isEmpty()) {
-            records.forEach(System.out::println);
+        if (!name.isEmpty()) {
+            if (!records.isEmpty()) {
+                records.forEach(System.out::println);
+            } else {
+                System.out.println("No matching records found.");
+            }
         } else {
-            System.out.println("No matching records found.");
+            System.out.println("Name was not provided");
+            //todo - заметил, что без этой проверки, при пустой строке выводит все записи
         }
     }
 

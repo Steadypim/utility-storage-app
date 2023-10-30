@@ -1,14 +1,11 @@
 package dev.steadypim.thewhitehw.homework1;
 
-import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
-import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
-import dev.steadypim.thewhitehw.homework1.service.UtilityStorageService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class UtilityStorageApp {
     public static void main(String[] args) {
-        UtilityStorage storage = new UtilityStorage(args[0]);
-        UtilityStorageRepositoryImpl storageRepo = new UtilityStorageRepositoryImpl(storage);
-        UtilityStorageService service = new UtilityStorageService(storageRepo);
-        service.run();
+        SpringApplication.run(UtilityStorageApp.class, args);
     }
 }

@@ -33,7 +33,7 @@ class UtilityStorageServiceTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         System.setOut(standardOut);
     }
 
@@ -41,7 +41,9 @@ class UtilityStorageServiceTest {
     public void testDisplayRecordById_existingRecord() {
         // Arrange
         int id = 1;
-        UtilityRecord record = new UtilityRecord(id, "Test Record", "Description", "Link");
+        UtilityRecord record = UtilityRecord.builder()
+                .id(id).name("Test Record").description("Description").link("Link")
+                .build();
         when(mockRepository.findByIdOrNull(id)).thenReturn(record);
 
         // Redirect System.out to capture console output
@@ -97,8 +99,12 @@ class UtilityStorageServiceTest {
         // Arrange
         String name = "test";
         List<UtilityRecord> records = new ArrayList<>();
-        records.add(new UtilityRecord(1, "Test Record 1", "Description 1", "Link 1"));
-        records.add(new UtilityRecord(2, "Test Record 2", "Description 2", "Link 2"));
+        records.add(UtilityRecord.builder()
+                .id(1).name("Test Record 1").description("Description 1").link("Link 1")
+                .build());
+        records.add(UtilityRecord.builder()
+                .id(2).name("Test Record 2").description("Description 2").link("Link 2")
+                .build());
         when(mockRepository.findAllByNameCaseInsensitive(name)).thenReturn(records);
 
         // Redirect System.out to capture console output

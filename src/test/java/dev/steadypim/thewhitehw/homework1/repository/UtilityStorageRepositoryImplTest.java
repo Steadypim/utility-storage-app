@@ -22,14 +22,17 @@ class UtilityStorageRepositoryImplTest {
     @InjectMocks
     private UtilityStorageRepositoryImpl repository;
 
-    private final UtilityRecord firstRecord = new UtilityRecord(1, "test 1", "test description 1", "https://test.com/1");
-    private final UtilityRecord secondRecord = new UtilityRecord(2, "test 1", "test description 2", "https://test.com/2");
-    private final UtilityRecord thirdRecord = new UtilityRecord(3, "test 3", "test description 3", "https://test.com/3");
+    private final UtilityRecord firstRecord = UtilityRecord.builder().id(1)
+            .name("test 1").description("test description 1").link("https://test.com/1").build();
+    private final UtilityRecord secondRecord = UtilityRecord.builder().id(2)
+            .name("test 1").description("test description 2").link("https://test.com/2").build();
+    private final UtilityRecord thirdRecord = UtilityRecord.builder().id(3)
+            .name("test 3").description("test description 3").link("https://test.com/3").build();
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        when(storage.storage()).thenReturn(Map.of(1, firstRecord,
+        when(storage.getStorage()).thenReturn(Map.of(1, firstRecord,
                 2, secondRecord,
                 3, thirdRecord));
     }
