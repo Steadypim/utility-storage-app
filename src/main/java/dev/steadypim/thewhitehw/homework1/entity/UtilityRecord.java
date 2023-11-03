@@ -4,14 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
-//Todo изменил рекорды на классы, т.к рекорды не получилось в DI добавить,
-// требовал конструкторы, проще было Lombok юзать.
 /**
  * Запись в хранилище
  */
-@Component
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

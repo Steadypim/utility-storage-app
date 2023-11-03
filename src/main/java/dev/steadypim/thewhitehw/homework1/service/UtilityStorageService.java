@@ -45,7 +45,6 @@ public class UtilityStorageService {
             }
         } else {
             System.out.println("Name was not provided");
-            //todo - заметил, что без этой проверки, при пустой строке выводит все записи
         }
     }
 
