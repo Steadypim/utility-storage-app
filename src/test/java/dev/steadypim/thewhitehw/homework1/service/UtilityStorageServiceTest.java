@@ -1,161 +1,203 @@
 package dev.steadypim.thewhitehw.homework1.service;
 
+import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
+import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
+import dev.steadypim.thewhitehw.homework1.mapper.UtilityStorageMapper;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UtilityStorageServiceTest {
 
-    private final PrintStream standardOut = System.out;
     @Mock
-    private UtilityStorageRepositoryImpl mockRepository;
+    private UtilityStorageRepositoryImpl repository;
 
-    private UtilityStorageService storageService;
+    @Mock
+    private UtilityStorageMapper mapper;
+
+    @InjectMocks
+    private UtilityStorageService service;
+
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
-        storageService = new UtilityStorageService(mockRepository);
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.setOut(standardOut);
+        service = new UtilityStorageService(repository, mapper);
+        Field idCounterField = UtilityStorageService.class.getDeclaredField("idCounter");
+        idCounterField.setAccessible(true);
+        AtomicInteger idCounter = new AtomicInteger(1);
+        idCounterField.set(service, idCounter);
     }
 
     @Test
-    public void testDisplayRecordById_existingRecord() {
-        // Arrange
+    public void testDisplayRecordById_ExistingRecord() {
+        //Arrange
         int id = 1;
         UtilityRecord record = UtilityRecord.builder()
-                .id(id).name("Test Record").description("Description").link("Link")
+                .id(id)
+                .name("test")
+                .description("test")
+                .link("test")
                 .build();
-        when(mockRepository.findByIdOrNull(id)).thenReturn(record);
 
-        // Redirect System.out to capture console output
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        System.setOut(printStream);
+        UtilityRecordDTO expectedDTO = new UtilityRecordDTO();
+        expectedDTO.setName("test");
+        expectedDTO.setDescription("test");
+        expectedDTO.setLink("test");
 
-        // Simulate user input
-        String userInput = String.valueOf(id);
-        InputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(inputStream);
+        when(repository.findById(id)).thenReturn(record);
+        when(mapper.toDto(record)).thenReturn(expectedDTO);
 
-        // Act
-        storageService.displayRecordById();
+        //Act
+        UtilityRecordDTO resultDTO = service.displayRecordById(id);
 
-        // Assert
-        String expectedOutput = "Enter the record id: " + record + System.lineSeparator();
-        assertEquals(expectedOutput, outputStream.toString());
-
-        // Verify that the repository method was called
-        verify(mockRepository, times(1)).findByIdOrNull(id);
+        //Assert
+        assertNotNull(resultDTO);
+        assertEquals(expectedDTO, resultDTO);
+        verify(repository, times(1)).findById(id);
+        verify(mapper, times(1)).toDto(record);
     }
 
     @Test
-    public void testDisplayRecordById_nonExistingRecord() {
-        // Arrange
+    public void testDisplayRecordById_NonExistingRecord() {
+        //Arrange
         int id = 1;
-        when(mockRepository.findByIdOrNull(id)).thenReturn(null);
 
-        // Redirect System.out to capture console output
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        System.setOut(printStream);
 
-        // Simulate user input
-        String userInput = String.valueOf(id);
-        InputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(inputStream);
+        when(repository.findById(id)).thenReturn(null);
 
-        // Act
-        storageService.displayRecordById();
+        //Assert
+        assertThrows(UtilityRecordNotFoundException.class, () -> service.displayRecordById(id));
 
-        // Assert
-        String expectedOutput = "Enter the record id: No such record with id: " + id + System.lineSeparator();
-        assertEquals(expectedOutput, outputStream.toString());
-
-        // Verify that the repository method was called
-        verify(mockRepository, times(1)).findByIdOrNull(id);
+        verify(repository, times(1)).findById(id);
+        verify(mapper, never()).toDto(any(UtilityRecord.class));
     }
 
     @Test
-    public void testDisplayRecordsByName_matchingRecordsFound() {
+    public void testDisplayRecordsByName() {
         // Arrange
-        String name = "test";
+        String name = "John";
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
         List<UtilityRecord> records = new ArrayList<>();
-        records.add(UtilityRecord.builder()
-                .id(1).name("Test Record 1").description("Description 1").link("Link 1")
-                .build());
-        records.add(UtilityRecord.builder()
-                .id(2).name("Test Record 2").description("Description 2").link("Link 2")
-                .build());
-        when(mockRepository.findAllByNameCaseInsensitive(name)).thenReturn(records);
+        records.add(new UtilityRecord(1, "John Doe", "test", "test"));
 
-        // Redirect System.out to capture console output
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        System.setOut(printStream);
+        // Mock repository behavior
+        when(repository.findAllByNameCaseInsensitive(eq(name), eq(pageable))).thenReturn(new PageImpl<>(records));
 
-        // Simulate user input
-        InputStream inputStream = new ByteArrayInputStream(name.getBytes());
-        System.setIn(inputStream);
+        List<UtilityRecordDTO> dtos = new ArrayList<>();
+        dtos.add(new UtilityRecordDTO("John Doe", "test", "test"));
+
+        // Mock mapper behavior
+        when(mapper.toDtoList(records)).thenReturn(dtos);
 
         // Act
-        storageService.displayRecordsByName();
+        Page<UtilityRecordDTO> result = service.displayRecordsByName(name, page, size);
 
         // Assert
-        StringBuilder expectedOutput = new StringBuilder();
-        for (UtilityRecord record : records) {
-            expectedOutput.append(record.toString()).append(System.lineSeparator());
-        }
-
-
-        assertEquals("Enter the name (case-insensitive): " + expectedOutput, outputStream.toString());
-
-        // Verify that the repository method was called
-        verify(mockRepository, times(1)).findAllByNameCaseInsensitive(name);
+        assertEquals(dtos, result.getContent());
+        assertEquals(pageable, result.getPageable());
+        assertEquals(1, result.getTotalElements());
     }
 
     @Test
-    public void testDisplayRecordsByName_noMatchingRecordsFound() {
-        // Arrange
-        String name = "test";
-        List<UtilityRecord> records = new ArrayList<>();
-        when(mockRepository.findAllByNameCaseInsensitive(name)).thenReturn(records);
+    public void testCreateRecord() {
+        //Arrange
+        UtilityRecordDTO dto = new UtilityRecordDTO();
+        dto.setName("test");
+        dto.setDescription("test");
+        dto.setLink("test");
 
-        // Redirect System.out to capture console output
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        System.setOut(printStream);
+        UtilityRecord record = new UtilityRecord();
+        record.setName("test");
+        record.setDescription("test");
+        record.setLink("test");
 
-        // Simulate user input
-        InputStream inputStream = new ByteArrayInputStream(name.getBytes());
-        System.setIn(inputStream);
+        when(mapper.toEntity(dto)).thenReturn(record);
+        when(repository.create(record)).thenReturn(record);
+        when(mapper.toDto(record)).thenReturn(dto);
 
-        // Act
-        storageService.displayRecordsByName();
+        //Act
+        UtilityRecordDTO resultDTO = service.createRecord(dto);
 
-        // Assert
-        String expectedOutput = "Enter the name (case-insensitive): No matching records found." + System.lineSeparator();
-        assertEquals(expectedOutput, outputStream.toString());
+        //Assert
+        assertNotNull(resultDTO);
+        assertEquals(dto, resultDTO);
+        verify(mapper, times(1)).toEntity(dto);
+        verify(repository, times(1)).create(record);
+        verify(mapper, times(1)).toDto(record);
+    }
 
-        // Verify that the repository method was called
-        verify(mockRepository, times(1)).findAllByNameCaseInsensitive(name);
+    @Test
+    public void testDeleteRecordById_ExistingRecord() {
+        //Arrange
+        int id = 1;
+        UtilityRecord record = new UtilityRecord();
+        record.setId(id);
+        record.setName("test");
+        record.setDescription("test");
+        record.setLink("test");
+
+        when(repository.findById(id)).thenReturn(record);
+
+        //Act
+        service.deleteRecordById(id);
+
+        //Assert
+        verify(repository, times(1)).findById(id);
+        verify(repository, times(1)).delete(record);
+    }
+
+    @Test
+    public void testDeleteRecordById_NonExistingRecord() {
+        //Arrange
+        int id = 1;
+
+        when(repository.findById(id)).thenReturn(null);
+
+        //Assert
+        assertThrows(UtilityRecordNotFoundException.class, () -> service.deleteRecordById(id));
+
+        verify(repository, times(1)).findById(id);
+        verify(repository, never()).delete(any(UtilityRecord.class));
+    }
+
+    @Test
+    public void testUpdateRecordById() {
+        //Arrange
+        int id = 1;
+        UtilityRecordDTO dto = new UtilityRecordDTO();
+        dto.setName("test");
+        dto.setDescription("test");
+        dto.setLink("test");
+
+        UtilityRecord record = new UtilityRecord();
+        record.setId(id);
+        record.setName("test");
+        record.setDescription("test");
+        record.setLink("test");
+
+        when(mapper.toEntity(dto)).thenReturn(record);
+
+        //Act
+        service.updateRecordById(dto, id);
+
+        //Assert
+        verify(repository, times(1)).update(record, id);
+        verify(mapper, times(1)).toEntity(dto);
     }
 }

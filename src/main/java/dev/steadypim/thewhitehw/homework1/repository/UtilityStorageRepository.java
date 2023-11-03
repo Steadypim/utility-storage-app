@@ -1,13 +1,18 @@
 package dev.steadypim.thewhitehw.homework1.repository;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Репозиторий для работы с данными в UtilityStorage
  */
 public interface UtilityStorageRepository {
-    UtilityRecord findByIdOrNull(int id);
-    List<UtilityRecord> findAllByNameCaseInsensitive(String name);
+    UtilityRecord findById(int id);
+
+    Page<UtilityRecord> findAllByNameCaseInsensitive(String name, Pageable pageable);
+
+    UtilityRecord create(UtilityRecord record);
+
+    void delete(UtilityRecord record);
 }

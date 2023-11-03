@@ -4,8 +4,8 @@ import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +29,7 @@ class UtilityStorageRepositoryImplTest {
         int existingId = 1;
 
         //Act
-        UtilityRecord actualRecord = repository.findByIdOrNull(existingId);
+        UtilityRecord actualRecord = repository.findById(existingId);
 
         //Assert
         assertNotNull(actualRecord);
@@ -42,7 +42,7 @@ class UtilityStorageRepositoryImplTest {
         int nonExistingId = 4;
 
         //Act
-        UtilityRecord actualRecord = repository.findByIdOrNull(nonExistingId);
+        UtilityRecord actualRecord = repository.findById(nonExistingId);
 
         //Assert
         assertNull(actualRecord);
@@ -54,12 +54,12 @@ class UtilityStorageRepositoryImplTest {
         String existingName = "Test 1";
 
         //Act
-        List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName);
+        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName, PageRequest.of(0, 10));
 
         //Assert
-        assertEquals(records.size(), 2);
-        assertTrue(records.contains(firstRecord));
-        assertTrue(records.contains(secondRecord));
+        assertEquals(records.getTotalElements(), 2);
+        assertTrue(records.getContent().contains(firstRecord));
+        assertTrue(records.getContent().contains(secondRecord));
     }
 
     @Test
@@ -68,10 +68,10 @@ class UtilityStorageRepositoryImplTest {
         String nonExistingName = "nonExisting";
 
         //Act
-        List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName);
+        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName, PageRequest.of(0, 10));
 
         //Assert
-        assertNotNull(records);
-        assertTrue(records.isEmpty());
+        assertEquals(0, records.getTotalElements());
+        assertTrue(records.getContent().isEmpty());
     }
 }
