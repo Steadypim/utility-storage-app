@@ -2,7 +2,6 @@ package dev.steadypim.thewhitehw.homework1.service;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepository;
-import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ import java.util.Scanner;
 public class UtilityStorageService {
     private final UtilityStorageRepository storage;
 
-    public UtilityStorageService(@NonNull UtilityStorageRepositoryImpl storage) {
+    public UtilityStorageService(@NonNull UtilityStorageRepository storage) {
         this.storage = storage;
     }
 

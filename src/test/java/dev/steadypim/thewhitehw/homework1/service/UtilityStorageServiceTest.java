@@ -42,7 +42,10 @@ class UtilityStorageServiceTest {
         // Arrange
         int id = 1;
         UtilityRecord record = UtilityRecord.builder()
-                .id(id).name("Test Record").description("Description").link("Link")
+                .id(id)
+                .name("Test Record")
+                .description("Description")
+                .link("Link")
                 .build();
         when(mockRepository.findByIdOrNull(id)).thenReturn(record);
 
@@ -100,10 +103,16 @@ class UtilityStorageServiceTest {
         String name = "test";
         List<UtilityRecord> records = new ArrayList<>();
         records.add(UtilityRecord.builder()
-                .id(1).name("Test Record 1").description("Description 1").link("Link 1")
+                .id(1)
+                .name("Test Record 1")
+                .description("Description 1")
+                .link("Link 1")
                 .build());
         records.add(UtilityRecord.builder()
-                .id(2).name("Test Record 2").description("Description 2").link("Link 2")
+                .id(2)
+                .name("Test Record 2")
+                .description("Description 2")
+                .link("Link 2")
                 .build());
         when(mockRepository.findAllByNameCaseInsensitive(name)).thenReturn(records);
 
