@@ -29,7 +29,7 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     }
 
     @Override
-    public UtilityRecord findById(@NonNull int id) {
+    public UtilityRecord findById(int id) {
         return utilityStorage.getStorage().get(id);
     }
 
