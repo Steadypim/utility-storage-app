@@ -3,7 +3,6 @@ package dev.steadypim.thewhitehw.homework1.repository;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import jakarta.annotation.PostConstruct;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,9 +21,9 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
         this.utilityStorage = null;
         this.filePath = filePath;
     }
-
+  
     @PostConstruct
-    private void initializeUtilityStorage() {
+    private void initializeUtilityStorage(){
         this.utilityStorage = new UtilityStorage(filePath);
     }
 

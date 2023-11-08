@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
 
 class UtilityStorageRepositoryImplTest {
     private UtilityStorageRepositoryImpl repository;
-
     @Mock
     private UtilityStorage utilityStorage;
 
@@ -29,6 +28,7 @@ class UtilityStorageRepositoryImplTest {
             .description("test description 1")
             .link("https://test.com/1")
             .build();
+
     private final UtilityRecord secondRecord = UtilityRecord
             .builder()
             .id(2)
