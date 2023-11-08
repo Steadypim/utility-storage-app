@@ -9,18 +9,18 @@ class UtilityStorageTest {
     @Test
     void testLoadedDataNotNull() {
         //Arrange
-        String filePath = "src/test/java/dev/steadypim/thewhitehw/homework1/test.json";
+        String filePath = "src/test/java/dev/steadypim/thewhitehw/homework1/entity/test.json";
         UtilityStorage utilityStorage = new UtilityStorage(filePath);
 
         //Act
-        UtilityRecord record = utilityStorage.storage().get(1);
+        UtilityRecord record = utilityStorage.getStorage().get(1);
 
         //Assert
-        assertFalse(utilityStorage.storage().isEmpty());
+        assertFalse(utilityStorage.getStorage().isEmpty());
 
-        assertEquals(1, record.id());
-        assertEquals("test 1", record.name());
-        assertEquals("test description 1", record.description());
-        assertEquals("https://test.com/1", record.link());
+        assertEquals(1, record.getId());
+        assertEquals("test 1", record.getName());
+        assertEquals("test description 1", record.getDescription());
+        assertEquals("https://test.com/1", record.getLink());
     }
 }

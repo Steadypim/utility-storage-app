@@ -2,6 +2,8 @@ package dev.steadypim.thewhitehw.homework1.entity;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,9 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record UtilityStorage(Map<Integer, UtilityRecord> storage){
+/**
+ * Хранилище записей
+ */
+@NoArgsConstructor
+@Data
+public class UtilityStorage{
+
+    private Map<Integer, UtilityRecord> storage;
     public UtilityStorage(String filePath) {
-        this(UtilityStorage.loadRecordsFromFile(filePath));
+        this.storage = loadRecordsFromFile(filePath);
     }
 
     private static Map<Integer, UtilityRecord> loadRecordsFromFile(String filePath) {
@@ -21,7 +30,7 @@ public record UtilityStorage(Map<Integer, UtilityRecord> storage){
             });
             Map<Integer, UtilityRecord> storage = new HashMap<>();
             for (UtilityRecord record : records) {
-                storage.put(record.id(), record);
+                storage.put(record.getId(), record);
             }
             return storage;
         } catch (IOException e) {

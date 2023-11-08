@@ -4,10 +4,11 @@ import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,29 +16,35 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class UtilityStorageRepositoryImplTest {
-
-    @Mock
-    private UtilityStorage storage;
-
-    @InjectMocks
     private UtilityStorageRepositoryImpl repository;
+    @Mock
+    private UtilityStorage utilityStorage;
 
-    private final UtilityRecord firstRecord = new UtilityRecord(1, "test 1", "test description 1", "https://test.com/1");
-    private final UtilityRecord secondRecord = new UtilityRecord(2, "test 1", "test description 2", "https://test.com/2");
-    private final UtilityRecord thirdRecord = new UtilityRecord(3, "test 3", "test description 3", "https://test.com/3");
+    private final UtilityRecord firstRecord = UtilityRecord.builder().id(1)
+            .name("test 1")
+            .description("test description 1")
+            .link("https://test.com/1")
+            .build();
+    private final UtilityRecord secondRecord = UtilityRecord.builder().id(2)
+            .name("test 1")
+            .description("test description 2")
+            .link("https://test.com/2")
+            .build();
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         MockitoAnnotations.openMocks(this);
-        when(storage.storage()).thenReturn(Map.of(1, firstRecord,
-                2, secondRecord,
-                3, thirdRecord));
+        repository = new UtilityStorageRepositoryImpl("");
+        setField(repository, "utilityStorage", utilityStorage);
     }
 
     @Test
     void testFindById() {
         //Arrange
         int existingId = 1;
+        Map<Integer, UtilityRecord> storage = new HashMap<>();
+        storage.put(existingId, firstRecord);
+        when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
         UtilityRecord actualRecord = repository.findByIdOrNull(existingId);
@@ -51,6 +58,8 @@ class UtilityStorageRepositoryImplTest {
     void testFindByNonExistingId() {
         //Arrange
         int nonExistingId = 4;
+        Map<Integer, UtilityRecord> storage = new HashMap<>();
+        when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
         UtilityRecord actualRecord = repository.findByIdOrNull(nonExistingId);
@@ -63,6 +72,10 @@ class UtilityStorageRepositoryImplTest {
     void testFindAllByNameCaseInsensitive() {
         //Arrange
         String existingName = "Test 1";
+        Map<Integer, UtilityRecord> storage = new HashMap<>();
+        storage.put(1, firstRecord);
+        storage.put(2, secondRecord);
+        when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
         List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName);
@@ -77,6 +90,8 @@ class UtilityStorageRepositoryImplTest {
     void testFindAllByNonExistingNameCaseInsensitive() {
         //Arrange
         String nonExistingName = "nonExisting";
+        Map<Integer, UtilityRecord> storage = new HashMap<>();
+        when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
         List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName);
@@ -84,5 +99,11 @@ class UtilityStorageRepositoryImplTest {
         //Assert
         assertNotNull(records);
         assertTrue(records.isEmpty());
+    }
+
+    private void setField(Object object, String fieldName, Object value) throws Exception {
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(object, value);
     }
 }
