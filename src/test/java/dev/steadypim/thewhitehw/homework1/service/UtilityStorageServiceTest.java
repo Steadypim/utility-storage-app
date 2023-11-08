@@ -46,7 +46,8 @@ class UtilityStorageServiceTest {
     public void testDisplayRecordById_ExistingRecord() {
         //Arrange
         int id = 1;
-        UtilityRecord record = UtilityRecord.builder()
+        UtilityRecord record = UtilityRecord
+                .builder()
                 .id(id)
                 .name("test")
                 .description("test")
