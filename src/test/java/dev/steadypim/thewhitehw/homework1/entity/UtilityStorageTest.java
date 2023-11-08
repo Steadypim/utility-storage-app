@@ -9,7 +9,7 @@ class UtilityStorageTest {
     @Test
     void testLoadedDataNotNull() {
         //Arrange
-        String filePath = "src/test/java/dev/steadypim/thewhitehw/homework1/test.json";
+        String filePath = "src/test/java/dev/steadypim/thewhitehw/homework1/entity/test.json";
         UtilityStorage utilityStorage = new UtilityStorage(filePath);
 
         //Act

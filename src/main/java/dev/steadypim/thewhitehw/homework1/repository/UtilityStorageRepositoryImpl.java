@@ -20,9 +20,9 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
         this.utilityStorage = null;
         this.filePath = filePath;
     }
-
+  
     @PostConstruct
-    private void initializeUtilityStorage() {
+    private void initializeUtilityStorage(){
         this.utilityStorage = new UtilityStorage(filePath);
     }
 

@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 @RequiredArgsConstructor
 public class UtilityStorageService {
-
     private final UtilityStorageRepositoryImpl repository;
     private final UtilityStorageMapper mapper;
     private AtomicInteger idCounter;
