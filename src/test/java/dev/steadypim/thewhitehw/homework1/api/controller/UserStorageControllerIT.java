@@ -1,6 +1,7 @@
 package dev.steadypim.thewhitehw.homework1.api.controller;
 
 import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
 import dev.steadypim.thewhitehw.homework1.service.UtilityStorageService;
 import org.assertj.core.api.SoftAssertions;
@@ -58,14 +59,9 @@ public class UserStorageControllerIT {
 
     @Test
     @Order(2)
-    void testFindAllByName(SoftAssertions assertions) {
+    void testFindAllByName() {
         // Arrange
         String name = "Запись 1";
-        List<UtilityRecordDTO> records = Arrays.asList(
-                new UtilityRecordDTO(name, "Описание записи 1", "https://example.com/1"),
-                new UtilityRecordDTO(name, "Описание записи 1", "https://example.com/2")
-        );
-        Page<UtilityRecordDTO> expectedPage = new PageImpl<>(records);
 
         // Act and Assert
         webTestClient.get()
@@ -105,7 +101,7 @@ public class UserStorageControllerIT {
 
     @Test
     @Order(5)
-    void testDeleteById(SoftAssertions assertions) {
+    void testDeleteById() {
         // Arrange
         int id = 3;
 
@@ -125,7 +121,7 @@ public class UserStorageControllerIT {
     void testUpdateById(SoftAssertions assertions) {
         // Arrange
         int id = 4;
-        UtilityRecordDTO recordToUpdate = new UtilityRecordDTO("Заявка 4", "Описание записи 4", "https://example.com/4");
+        UtilityRecord recordToUpdate = new UtilityRecord(id, "Заявка 4", "Описание записи 4", "https://example.com/4");
 
         // Act
         webTestClient.put()
@@ -136,7 +132,7 @@ public class UserStorageControllerIT {
                 .expectStatus().isOk();
 
         // Assert
-        UtilityRecordDTO retrievedRecord = service.displayRecordById(id);
+        UtilityRecord retrievedRecord = service.displayRecordById(id);
         assertions.assertThat(retrievedRecord)
                 .isEqualToComparingFieldByField(recordToUpdate);
     }

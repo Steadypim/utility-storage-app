@@ -1,12 +1,12 @@
 package dev.steadypim.thewhitehw.homework1.service;
 
-import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
-import dev.steadypim.thewhitehw.homework1.mapper.UtilityStorageMapper;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
+import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,9 +25,6 @@ class UtilityStorageServiceTest {
     @Mock
     private UtilityStorageRepositoryImpl repository;
 
-    @Mock
-    private UtilityStorageMapper mapper;
-
     @InjectMocks
     private UtilityStorageService service;
 
@@ -35,7 +32,7 @@ class UtilityStorageServiceTest {
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
-        service = new UtilityStorageService(repository, mapper);
+        service = new UtilityStorageService(repository);
         Field idCounterField = UtilityStorageService.class.getDeclaredField("idCounter");
         idCounterField.setAccessible(true);
         AtomicInteger idCounter = new AtomicInteger(1);
@@ -45,7 +42,7 @@ class UtilityStorageServiceTest {
     @Test
     public void testDisplayRecordById_ExistingRecord() {
         //Arrange
-        int id = 1;
+        int id = 0;
         UtilityRecord record = UtilityRecord
                 .builder()
                 .id(id)
@@ -54,22 +51,20 @@ class UtilityStorageServiceTest {
                 .link("test")
                 .build();
 
-        UtilityRecordDTO expectedDTO = new UtilityRecordDTO();
+        UtilityRecord expectedDTO = new UtilityRecord();
         expectedDTO.setName("test");
         expectedDTO.setDescription("test");
         expectedDTO.setLink("test");
 
         when(repository.findById(id)).thenReturn(record);
-        when(mapper.toDto(record)).thenReturn(expectedDTO);
 
         //Act
-        UtilityRecordDTO resultDTO = service.displayRecordById(id);
+        UtilityRecord result = service.displayRecordById(id);
 
         //Assert
-        assertNotNull(resultDTO);
-        assertEquals(expectedDTO, resultDTO);
+        assertNotNull(result);
+        assertEquals(expectedDTO, result);
         verify(repository, times(1)).findById(id);
-        verify(mapper, times(1)).toDto(record);
     }
 
     @Test
@@ -84,7 +79,6 @@ class UtilityStorageServiceTest {
         assertThrows(UtilityRecordNotFoundException.class, () -> service.displayRecordById(id));
 
         verify(repository, times(1)).findById(id);
-        verify(mapper, never()).toDto(any(UtilityRecord.class));
     }
 
     @Test
@@ -97,20 +91,16 @@ class UtilityStorageServiceTest {
         List<UtilityRecord> records = new ArrayList<>();
         records.add(new UtilityRecord(1, "John Doe", "test", "test"));
 
+        Page<UtilityRecord> expectedPage = new PageImpl<>(records, pageable, 1);
+
         // Mock repository behavior
-        when(repository.findAllByNameCaseInsensitive(eq(name), eq(pageable))).thenReturn(new PageImpl<>(records));
-
-        List<UtilityRecordDTO> dtos = new ArrayList<>();
-        dtos.add(new UtilityRecordDTO("John Doe", "test", "test"));
-
-        // Mock mapper behavior
-        when(mapper.toDtoList(records)).thenReturn(dtos);
+        when(repository.findAllByNameCaseInsensitive(eq(name), eq(pageable))).thenReturn(expectedPage);
 
         // Act
-        Page<UtilityRecordDTO> result = service.displayRecordsByName(name, page, size);
+        Page<UtilityRecord> result = service.displayRecordsByName(name, pageable);
 
         // Assert
-        assertEquals(dtos, result.getContent());
+        assertEquals(records, result.getContent());
         assertEquals(pageable, result.getPageable());
         assertEquals(1, result.getTotalElements());
     }
@@ -118,29 +108,31 @@ class UtilityStorageServiceTest {
     @Test
     public void testCreateRecord() {
         //Arrange
-        UtilityRecordDTO dto = new UtilityRecordDTO();
-        dto.setName("test");
-        dto.setDescription("test");
-        dto.setLink("test");
-
-        UtilityRecord record = new UtilityRecord();
+        CreateUtilityRecordArgument record = new CreateUtilityRecordArgument();
         record.setName("test");
         record.setDescription("test");
         record.setLink("test");
 
-        when(mapper.toEntity(dto)).thenReturn(record);
-        when(repository.create(record)).thenReturn(record);
-        when(mapper.toDto(record)).thenReturn(dto);
-
+        int expectedId = 1;
+        when(repository.create(any(UtilityRecord.class))).thenAnswer(invocation -> {
+            UtilityRecord createdRecord = invocation.getArgument(0);
+            createdRecord.setId(expectedId);
+            return createdRecord;
+        });
         //Act
-        UtilityRecordDTO resultDTO = service.createRecord(dto);
+        UtilityRecord result = service.createRecord(record);
 
         //Assert
-        assertNotNull(resultDTO);
-        assertEquals(dto, resultDTO);
-        verify(mapper, times(1)).toEntity(dto);
-        verify(repository, times(1)).create(record);
-        verify(mapper, times(1)).toDto(record);
+        assertEquals(expectedId, result.getId());
+
+        ArgumentCaptor<UtilityRecord> recordCaptor = ArgumentCaptor.forClass(UtilityRecord.class);
+        verify(repository).create(recordCaptor.capture());
+
+        UtilityRecord capturedRecord = recordCaptor.getValue();
+        assertEquals(record.getName(), capturedRecord.getName());
+        assertEquals(record.getLink(), capturedRecord.getLink());
+        assertEquals(record.getDescription(), capturedRecord.getDescription());
+
     }
 
     @Test
@@ -181,10 +173,6 @@ class UtilityStorageServiceTest {
     public void testUpdateRecordById() {
         //Arrange
         int id = 1;
-        UtilityRecordDTO dto = new UtilityRecordDTO();
-        dto.setName("test");
-        dto.setDescription("test");
-        dto.setLink("test");
 
         UtilityRecord record = new UtilityRecord();
         record.setId(id);
@@ -192,13 +180,11 @@ class UtilityStorageServiceTest {
         record.setDescription("test");
         record.setLink("test");
 
-        when(mapper.toEntity(dto)).thenReturn(record);
 
         //Act
-        service.updateRecordById(dto, id);
+        service.updateRecordById(record, id);
 
         //Assert
         verify(repository, times(1)).update(record, id);
-        verify(mapper, times(1)).toEntity(dto);
     }
 }
