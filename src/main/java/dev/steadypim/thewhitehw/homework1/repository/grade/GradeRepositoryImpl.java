@@ -25,6 +25,7 @@ public class GradeRepositoryImpl implements GradeRepository{
     @Override
     public Grade create(Grade grade) {
         int id = idCounter.getAndIncrement();
+        grade.setId(id);
         grades.put(id, grade);
         return grades.get(grade.getId());
     }
@@ -32,7 +33,7 @@ public class GradeRepositoryImpl implements GradeRepository{
     @Override
     public List<Grade> findAllById(int recordId) {
         return grades.values().stream()
-                .filter(grade -> grade.getId() == recordId)
+                .filter(grade -> grade.getRecordId() == recordId)
                 .collect(Collectors.toList());
     }
 

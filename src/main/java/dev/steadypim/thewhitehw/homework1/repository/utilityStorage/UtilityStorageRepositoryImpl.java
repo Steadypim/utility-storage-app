@@ -19,11 +19,6 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     private final String filePath;
     private AtomicInteger idCounter;
 
-    @PostConstruct
-    public void initializeCounter(){
-        int maxId = getMaxRecordId();
-        idCounter = new AtomicInteger(maxId + 1);
-    }
     public UtilityStorageRepositoryImpl(@Value("${data.file.path}") String filePath) {
         this.utilityStorage = null;
         this.filePath = filePath;
@@ -32,6 +27,8 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     @PostConstruct
     private void initializeUtilityStorage(){
         this.utilityStorage = new UtilityStorage(filePath);
+        int maxId = getMaxRecordId();
+        idCounter = new AtomicInteger(maxId + 1);
     }
 
     @Override
@@ -56,6 +53,7 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     @Override
     public UtilityRecord create(UtilityRecord record) {
         int id = idCounter.getAndIncrement();
+        record.setId(id);
         utilityStorage.getStorage().put(id, record);
         return utilityStorage.getStorage().get(record.getId());
     }
