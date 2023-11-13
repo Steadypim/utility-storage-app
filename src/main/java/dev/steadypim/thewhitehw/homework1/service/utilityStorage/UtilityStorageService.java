@@ -1,18 +1,16 @@
-package dev.steadypim.thewhitehw.homework1.service;
+package dev.steadypim.thewhitehw.homework1.service.utilityStorage;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
-import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
-import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
-import dev.steadypim.thewhitehw.homework1.service.argument.UpdateUtilityRecordArgument;
-import jakarta.annotation.PostConstruct;
+import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.UpdateUtilityRecordArgument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Сервис хранилища
@@ -21,27 +19,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class UtilityStorageService {
     private final UtilityStorageRepositoryImpl repository;
-    private AtomicInteger idCounter;
 
-    @PostConstruct
-    public void initializeCounter(){
-        int maxId = repository.getMaxRecordId();
-        idCounter = new AtomicInteger(maxId + 1);
-    }
-
-    public UtilityRecord displayRecordById(int id) {
+    public UtilityRecord findRecordById(int id) {
         return Optional.ofNullable(repository.findById(id))
-                .orElseThrow(() -> new UtilityRecordNotFoundException("Запись не найдена"));
+                .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
     }
 
-    public Page<UtilityRecord> displayRecordsByName(String name, Pageable pageable) {
+    public Page<UtilityRecord> findAllRecordsByName(String name, Pageable pageable) {
         return repository.findAllByNameCaseInsensitive(name, pageable);
     }
 
     public UtilityRecord createRecord(CreateUtilityRecordArgument argument){
-        int id = idCounter.getAndIncrement();
         UtilityRecord record = UtilityRecord.builder()
-                .id(id)
                 .name(argument.getName())
                 .link(argument.getLink())
                 .description(argument.getDescription())
@@ -51,7 +40,7 @@ public class UtilityStorageService {
 
     public void deleteRecordById(int id){
         repository.delete(Optional.ofNullable(repository.findById(id)).
-                orElseThrow(() -> new UtilityRecordNotFoundException("Запись не найдена")));
+                orElseThrow(() -> new EntityNotFoundException("Запись не найдена")));
     }
 
     public void updateRecordById(UpdateUtilityRecordArgument dto, int id){

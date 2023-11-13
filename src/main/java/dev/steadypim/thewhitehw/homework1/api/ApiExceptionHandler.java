@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.api;
 
-import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
+import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,11 +12,11 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     /**
-     * При появлении исключения {@link UtilityRecordNotFoundException} возвращает статус 404 и сообщение об ошибке.
+     * При появлении исключения {@link EntityNotFoundException} возвращает статус 404 и сообщение об ошибке.
      */
     @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(UtilityRecordNotFoundException.class)
-    public @ResponseBody ErrorDTO processNotFoundException(UtilityRecordNotFoundException exception) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public @ResponseBody ErrorDTO processNotFoundException(EntityNotFoundException exception) {
         return ErrorDTO.of(exception.getMessage());
     }
 }

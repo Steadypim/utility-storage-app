@@ -1,10 +1,11 @@
 package dev.steadypim.thewhitehw.homework1.service;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
-import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
-import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
-import dev.steadypim.thewhitehw.homework1.service.argument.UpdateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.UpdateUtilityRecordArgument;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -60,7 +61,7 @@ class UtilityStorageServiceTest {
         when(repository.findById(id)).thenReturn(record);
 
         //Act
-        UtilityRecord result = service.displayRecordById(id);
+        UtilityRecord result = service.findRecordById(id);
 
         //Assert
         assertNotNull(result);
@@ -77,7 +78,7 @@ class UtilityStorageServiceTest {
         when(repository.findById(id)).thenReturn(null);
 
         //Assert
-        assertThrows(UtilityRecordNotFoundException.class, () -> service.displayRecordById(id));
+        assertThrows(EntityNotFoundException.class, () -> service.findRecordById(id));
 
         verify(repository, times(1)).findById(id);
     }
@@ -98,7 +99,7 @@ class UtilityStorageServiceTest {
         when(repository.findAllByNameCaseInsensitive(eq(name), eq(pageable))).thenReturn(expectedPage);
 
         // Act
-        Page<UtilityRecord> result = service.displayRecordsByName(name, pageable);
+        Page<UtilityRecord> result = service.findAllRecordsByName(name, pageable);
 
         // Assert
         assertEquals(records, result.getContent());
@@ -164,7 +165,7 @@ class UtilityStorageServiceTest {
         when(repository.findById(id)).thenReturn(null);
 
         //Assert
-        assertThrows(UtilityRecordNotFoundException.class, () -> service.deleteRecordById(id));
+        assertThrows(EntityNotFoundException.class, () -> service.deleteRecordById(id));
 
         verify(repository, times(1)).findById(id);
         verify(repository, never()).delete(any(UtilityRecord.class));

@@ -1,4 +1,4 @@
-package dev.steadypim.thewhitehw.homework1.repository;
+package dev.steadypim.thewhitehw.homework1.repository.utilityStorage;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import org.springframework.data.domain.Page;

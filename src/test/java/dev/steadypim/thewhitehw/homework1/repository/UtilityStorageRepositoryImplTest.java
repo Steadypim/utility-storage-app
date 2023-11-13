@@ -2,6 +2,7 @@ package dev.steadypim.thewhitehw.homework1.repository;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

@@ -1,12 +1,12 @@
-package dev.steadypim.thewhitehw.homework1.api.controller;
+package dev.steadypim.thewhitehw.homework1.api.utilityStorage;
 
-import dev.steadypim.thewhitehw.homework1.api.dtos.CreateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.dtos.UpdateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UpdateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
-import dev.steadypim.thewhitehw.homework1.mapper.UtilityStorageMapper;
-import dev.steadypim.thewhitehw.homework1.service.UtilityStorageService;
-import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.api.utilityStorage.mapper.UtilityStorageMapper;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,14 +34,14 @@ public class UtilityStorageController {
     @Operation(description = "Получение записи по идентификатору")
     @ApiResponse(description = "Запись не найдена", responseCode = "404")
     public UtilityRecordDTO findById(@PathVariable("id") int id) {
-        return mapper.toDto(service.displayRecordById(id));
+        return mapper.toDto(service.findRecordById(id));
     }
 
     @GetMapping("name")
     @Operation(description = "Поиск записей по имени")
     public Page<UtilityRecordDTO> findAllByName(@RequestParam("name") String name,
                                                 @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
-        Page<UtilityRecord> records = service.displayRecordsByName(name, pageable);
+        Page<UtilityRecord> records = service.findAllRecordsByName(name, pageable);
         List<UtilityRecordDTO> dto = mapper.toDtoList(records.getContent());
 
         return new PageImpl<>(dto, pageable, records.getTotalElements());

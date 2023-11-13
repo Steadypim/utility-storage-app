@@ -1,4 +1,4 @@
-package dev.steadypim.thewhitehw.homework1.repository;
+package dev.steadypim.thewhitehw.homework1.repository.utilityStorage;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
@@ -10,12 +10,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
 public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     private UtilityStorage utilityStorage;
     private final String filePath;
+    private AtomicInteger idCounter;
+
+    @PostConstruct
+    public void initializeCounter(){
+        int maxId = getMaxRecordId();
+        idCounter = new AtomicInteger(maxId + 1);
+    }
     public UtilityStorageRepositoryImpl(@Value("${data.file.path}") String filePath) {
         this.utilityStorage = null;
         this.filePath = filePath;
@@ -47,7 +55,8 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
 
     @Override
     public UtilityRecord create(UtilityRecord record) {
-        utilityStorage.getStorage().put(record.getId(), record);
+        int id = idCounter.getAndIncrement();
+        utilityStorage.getStorage().put(id, record);
         return utilityStorage.getStorage().get(record.getId());
     }
 

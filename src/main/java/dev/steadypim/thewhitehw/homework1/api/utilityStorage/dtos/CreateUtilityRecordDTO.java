@@ -1,4 +1,4 @@
-package dev.steadypim.thewhitehw.homework1.api.dtos;
+package dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUtilityRecordDTO {
+public class CreateUtilityRecordDTO {
     private String name;
     private String description;
     private String link;

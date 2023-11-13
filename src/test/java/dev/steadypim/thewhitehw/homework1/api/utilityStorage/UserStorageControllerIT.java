@@ -1,10 +1,10 @@
-package dev.steadypim.thewhitehw.homework1.api.controller;
+package dev.steadypim.thewhitehw.homework1.api.utilityStorage;
 
-import dev.steadypim.thewhitehw.homework1.api.dtos.CreateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
-import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
-import dev.steadypim.thewhitehw.homework1.service.UtilityStorageService;
+import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
+import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.MethodOrderer;
@@ -115,8 +115,8 @@ public class UserStorageControllerIT {
                 .expectStatus().isOk();
 
         // Assert
-        assertThatThrownBy(() -> service.displayRecordById(id))
-                .isInstanceOf(UtilityRecordNotFoundException.class);
+        assertThatThrownBy(() -> service.findRecordById(id))
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class UserStorageControllerIT {
                 .expectStatus().isOk();
 
         // Assert
-        UtilityRecord retrievedRecord = service.displayRecordById(id);
+        UtilityRecord retrievedRecord = service.findRecordById(id);
         assertions.assertThat(retrievedRecord)
                 .isEqualToComparingFieldByField(recordToUpdate);
     }
