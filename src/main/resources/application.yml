@@ -1,3 +1,12 @@
 data:
   file:
     path: "data.json"
+
+server:
+  port: 8090
+
+springdoc:
+  swagger-ui:
+    path: /api-ui
+  api-docs:
+    path: /api-docs

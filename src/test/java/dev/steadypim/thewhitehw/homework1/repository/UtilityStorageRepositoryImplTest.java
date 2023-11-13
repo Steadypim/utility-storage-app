@@ -6,10 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,12 +21,17 @@ class UtilityStorageRepositoryImplTest {
     @Mock
     private UtilityStorage utilityStorage;
 
-    private final UtilityRecord firstRecord = UtilityRecord.builder().id(1)
+    private final UtilityRecord firstRecord = UtilityRecord
+            .builder()
+            .id(1)
             .name("test 1")
             .description("test description 1")
             .link("https://test.com/1")
             .build();
-    private final UtilityRecord secondRecord = UtilityRecord.builder().id(2)
+
+    private final UtilityRecord secondRecord = UtilityRecord
+            .builder()
+            .id(2)
             .name("test 1")
             .description("test description 2")
             .link("https://test.com/2")
@@ -47,7 +53,7 @@ class UtilityStorageRepositoryImplTest {
         when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
-        UtilityRecord actualRecord = repository.findByIdOrNull(existingId);
+        UtilityRecord actualRecord = repository.findById(existingId);
 
         //Assert
         assertNotNull(actualRecord);
@@ -62,7 +68,7 @@ class UtilityStorageRepositoryImplTest {
         when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
-        UtilityRecord actualRecord = repository.findByIdOrNull(nonExistingId);
+        UtilityRecord actualRecord = repository.findById(nonExistingId);
 
         //Assert
         assertNull(actualRecord);
@@ -78,12 +84,12 @@ class UtilityStorageRepositoryImplTest {
         when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
-        List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName);
+        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName, PageRequest.of(0, 10));
 
         //Assert
-        assertEquals(records.size(), 2);
-        assertTrue(records.contains(firstRecord));
-        assertTrue(records.contains(secondRecord));
+        assertEquals(records.getTotalElements(), 2);
+        assertTrue(records.getContent().contains(firstRecord));
+        assertTrue(records.getContent().contains(secondRecord));
     }
 
     @Test
@@ -94,11 +100,11 @@ class UtilityStorageRepositoryImplTest {
         when(utilityStorage.getStorage()).thenReturn(storage);
 
         //Act
-        List<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName);
+        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName, PageRequest.of(0, 10));
 
         //Assert
-        assertNotNull(records);
-        assertTrue(records.isEmpty());
+        assertEquals(0, records.getTotalElements());
+        assertTrue(records.getContent().isEmpty());
     }
 
     private void setField(Object object, String fieldName, Object value) throws Exception {
