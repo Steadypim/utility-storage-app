@@ -49,9 +49,9 @@ public class UtilityStorageController {
 
     @PostMapping("create")
     @Operation(description = "Добавление записи")
-    public CreateUtilityRecordDTO create(@RequestBody CreateUtilityRecordDTO dto) {
+    public UtilityRecordDTO create(@RequestBody CreateUtilityRecordDTO dto) {
         CreateUtilityRecordArgument record = mapper.toCreateArgument(dto);
-        return mapper.toCreateDto(service.createRecord(record));
+        return mapper.toDto(service.createRecord(record));
     }
 
     @DeleteMapping("{id}")
@@ -64,6 +64,6 @@ public class UtilityStorageController {
     @PutMapping("{id}")
     @Operation(description = "Изменение записи по id")
     public void updateById(@RequestBody UpdateUtilityRecordDTO dto, @PathVariable("id") int id) {
-        service.updateRecordById(mapper.toUpdateEntity(dto), id);
+        service.updateRecordById(mapper.toUpdateArgument(dto), id);
     }
 }

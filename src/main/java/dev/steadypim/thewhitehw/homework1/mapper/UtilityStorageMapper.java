@@ -5,6 +5,7 @@ import dev.steadypim.thewhitehw.homework1.api.dtos.UpdateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.argument.UpdateUtilityRecordArgument;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -17,9 +18,7 @@ public interface UtilityStorageMapper {
 
     List<UtilityRecordDTO> toDtoList(List<UtilityRecord> records);
 
-    CreateUtilityRecordDTO toCreateDto(UtilityRecord record);
-
     CreateUtilityRecordArgument toCreateArgument(CreateUtilityRecordDTO dto);
 
-    UtilityRecord toUpdateEntity(UpdateUtilityRecordDTO dto);
+    UpdateUtilityRecordArgument toUpdateArgument(UpdateUtilityRecordDTO dto);
 }

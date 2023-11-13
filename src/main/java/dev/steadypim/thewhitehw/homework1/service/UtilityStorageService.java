@@ -4,6 +4,7 @@ import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
 import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.argument.UpdateUtilityRecordArgument;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,8 +35,7 @@ public class UtilityStorageService {
     }
 
     public Page<UtilityRecord> displayRecordsByName(String name, Pageable pageable) {
-        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(name, pageable);
-        return records;
+        return repository.findAllByNameCaseInsensitive(name, pageable);
     }
 
     public UtilityRecord createRecord(CreateUtilityRecordArgument argument){
@@ -54,7 +54,13 @@ public class UtilityStorageService {
                 orElseThrow(() -> new UtilityRecordNotFoundException("Запись не найдена")));
     }
 
-    public void updateRecordById(UtilityRecord dto, int id){
-        repository.update(dto, id);
+    public void updateRecordById(UpdateUtilityRecordArgument dto, int id){
+        UtilityRecord record = UtilityRecord.builder()
+                .id(id)
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .link(dto.getLink())
+                .build();
+        repository.update(record, id);
     }
 }

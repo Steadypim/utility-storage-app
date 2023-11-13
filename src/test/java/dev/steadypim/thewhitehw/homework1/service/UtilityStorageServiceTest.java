@@ -4,6 +4,7 @@ import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
 import dev.steadypim.thewhitehw.homework1.repository.UtilityStorageRepositoryImpl;
 import dev.steadypim.thewhitehw.homework1.service.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.argument.UpdateUtilityRecordArgument;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -174,17 +175,23 @@ class UtilityStorageServiceTest {
         //Arrange
         int id = 1;
 
-        UtilityRecord record = new UtilityRecord();
-        record.setId(id);
-        record.setName("test");
-        record.setDescription("test");
-        record.setLink("test");
+        UtilityRecord record1 = UtilityRecord.builder()
+                .id(id)
+                .name("test")
+                .description("test")
+                .link("test")
+                .build();
+
+        UpdateUtilityRecordArgument record2 = new UpdateUtilityRecordArgument();
+        record2.setName(record1.getName());
+        record2.setDescription(record1.getDescription());
+        record2.setLink(record1.getLink());
 
 
         //Act
-        service.updateRecordById(record, id);
+        service.updateRecordById(record2, id);
 
         //Assert
-        verify(repository, times(1)).update(record, id);
+        verify(repository, times(1)).update(record1, id);
     }
 }

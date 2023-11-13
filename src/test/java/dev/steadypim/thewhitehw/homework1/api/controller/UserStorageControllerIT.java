@@ -1,5 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.api.controller;
 
+import dev.steadypim.thewhitehw.homework1.api.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.exception.UtilityRecordNotFoundException;
@@ -14,13 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -42,7 +38,7 @@ public class UserStorageControllerIT {
     void testFindById(SoftAssertions assertions) {
         // Arrange
         int id = 1;
-        UtilityRecordDTO expectedRecord = new UtilityRecordDTO("Запись 1", "Описание записи 1", "https://example.com/1");
+        UtilityRecordDTO expectedRecord = new UtilityRecordDTO(id, "Запись 1", "Описание записи 1", "https://example.com/1");
 
         // Act
         webTestClient.get()
@@ -81,7 +77,14 @@ public class UserStorageControllerIT {
     @Order(3)
     void testCreate(SoftAssertions assertions) {
         // Arrange
-        UtilityRecordDTO recordToCreate = new UtilityRecordDTO("Заявка 4", "Описание записи 2", "https://example.com/2");
+        CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO("Заявка 4", "Описание записи 2", "https://example.com/2");
+
+        UtilityRecordDTO recordToCompare = new UtilityRecordDTO(
+                4,
+                recordToCreate.getName(),
+                recordToCreate.getDescription(),
+                recordToCreate.getLink()
+        );
 
         // Act
         webTestClient.post()
@@ -94,7 +97,7 @@ public class UserStorageControllerIT {
                 .value(createdRecord -> {
                     // Assert
                     assertions.assertThat(createdRecord)
-                            .isEqualToComparingFieldByField(recordToCreate);
+                            .isEqualToComparingFieldByField(recordToCompare);
 
                 });
     }
