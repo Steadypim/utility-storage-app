@@ -1,14 +1,12 @@
 package dev.steadypim.thewhitehw.homework1.service.grade;
 
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
-import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
 import dev.steadypim.thewhitehw.homework1.repository.grade.GradeRepository;
 import dev.steadypim.thewhitehw.homework1.service.grade.argument.CreateGradeArgument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +29,7 @@ public class GradeServiceImpl implements GradeService{
     }
 
     @Override
-    public List<Grade> findAllById(int recordId) {
-        return Optional.ofNullable(repository.findAllById(recordId))
-                .orElseThrow(() -> new EntityNotFoundException("Данная запись не имеет оценок"));
+    public List<Grade> findAllByRecordId(int recordId) {
+        return repository.findAllByRecordId(recordId);
     }
 }

@@ -1,9 +1,9 @@
-package dev.steadypim.thewhitehw.homework1.api.utilityStorage.mapper;
+package dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper;
 
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.CreateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UpdateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.UpdateUtilityRecordArgument;
 import org.mapstruct.Mapper;
@@ -14,9 +14,9 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
 @Mapper(componentModel = SPRING)
 public interface UtilityStorageMapper {
-    UtilityRecordDTO toDto(UtilityRecord record);
+    UtilityRecordDTO toDto(UtilityStorage record);
 
-    List<UtilityRecordDTO> toDtoList(List<UtilityRecord> records);
+    List<UtilityRecordDTO> toDtoList(List<UtilityStorage> records);
 
     CreateUtilityRecordArgument toCreateArgument(CreateUtilityRecordDTO dto);
 

@@ -10,7 +10,7 @@ import java.util.List;
 public interface GradeRepository {
     Grade create(Grade grade);
 
-    List<Grade> findAllById(int recordId);
+    List<Grade> findAllByRecordId(int recordId);
 
     void delete(int id);
 }

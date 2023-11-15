@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.repository.utilityStorage;
 
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,11 +8,11 @@ import org.springframework.data.domain.Pageable;
  * Репозиторий для работы с данными в UtilityStorage
  */
 public interface UtilityStorageRepository {
-    UtilityRecord findById(int id);
+    UtilityStorage findById(int id);
 
-    Page<UtilityRecord> findAllByNameCaseInsensitive(String name, Pageable pageable);
+    Page<UtilityStorage> findAllByNameCaseInsensitive(String name, Pageable pageable);
 
-    UtilityRecord create(UtilityRecord record);
+    UtilityStorage create(UtilityStorage record);
 
-    void delete(UtilityRecord record);
+    void delete(UtilityStorage record);
 }

@@ -1,75 +1,46 @@
 package dev.steadypim.thewhitehw.homework1.repository;
 
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class UtilityStorageRepositoryImplTest {
     private UtilityStorageRepositoryImpl repository;
-    @Mock
-    private UtilityStorage utilityStorage;
-
-    private final UtilityRecord firstRecord = UtilityRecord
-            .builder()
-            .id(1)
-            .name("test 1")
-            .description("test description 1")
-            .link("https://test.com/1")
-            .build();
-
-    private final UtilityRecord secondRecord = UtilityRecord
-            .builder()
-            .id(2)
-            .name("test 1")
-            .description("test description 2")
-            .link("https://test.com/2")
-            .build();
 
     @BeforeEach
-    void setup() throws Exception {
-        MockitoAnnotations.openMocks(this);
-        repository = new UtilityStorageRepositoryImpl("");
-        setField(repository, "utilityStorage", utilityStorage);
+    void setUp() {
+        repository = new UtilityStorageRepositoryImpl();
     }
+
 
     @Test
     void testFindById() {
-        //Arrange
-        int existingId = 1;
-        Map<Integer, UtilityRecord> storage = new HashMap<>();
-        storage.put(existingId, firstRecord);
-        when(utilityStorage.getStorage()).thenReturn(storage);
+        // Arrange
+        int expectedId = 1;
+        UtilityStorage expectedRecord = new UtilityStorage();
+        expectedRecord.setId(expectedId);
+        repository.create(expectedRecord);
 
-        //Act
-        UtilityRecord actualRecord = repository.findById(existingId);
+        // Act
+        UtilityStorage actualRecord = repository.findById(expectedId);
 
-        //Assert
+        // Assert
         assertNotNull(actualRecord);
-        assertEquals(actualRecord, firstRecord);
+        assertEquals(expectedRecord, actualRecord);
     }
 
     @Test
     void testFindByNonExistingId() {
         //Arrange
-        int nonExistingId = 4;
-        Map<Integer, UtilityRecord> storage = new HashMap<>();
-        when(utilityStorage.getStorage()).thenReturn(storage);
+        int nonExistingId = 1;
 
         //Act
-        UtilityRecord actualRecord = repository.findById(nonExistingId);
+        UtilityStorage actualRecord = repository.findById(nonExistingId);
 
         //Assert
         assertNull(actualRecord);
@@ -79,38 +50,36 @@ class UtilityStorageRepositoryImplTest {
     void testFindAllByNameCaseInsensitive() {
         //Arrange
         String existingName = "Test 1";
-        Map<Integer, UtilityRecord> storage = new HashMap<>();
-        storage.put(1, firstRecord);
-        storage.put(2, secondRecord);
-        when(utilityStorage.getStorage()).thenReturn(storage);
+        UtilityStorage record1 = new UtilityStorage(1, "test 1", "", "");
+        UtilityStorage record2 = new UtilityStorage(2, "Test 1", "", "");
 
+        repository.create(record1);
+        repository.create(record2);
         //Act
-        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(existingName, PageRequest.of(0, 10));
+        Page<UtilityStorage> records = repository.findAllByNameCaseInsensitive(existingName, PageRequest.of(0, 10));
 
         //Assert
         assertEquals(records.getTotalElements(), 2);
-        assertTrue(records.getContent().contains(firstRecord));
-        assertTrue(records.getContent().contains(secondRecord));
+        assertTrue(records.getContent().contains(record1));
+        assertTrue(records.getContent().contains(record2));
     }
 
     @Test
     void testFindAllByNonExistingNameCaseInsensitive() {
         //Arrange
         String nonExistingName = "nonExisting";
-        Map<Integer, UtilityRecord> storage = new HashMap<>();
-        when(utilityStorage.getStorage()).thenReturn(storage);
+        UtilityStorage record1 = new UtilityStorage(1, "test 1", "", "");
+        UtilityStorage record2 = new UtilityStorage(2, "test 1", "", "");
+
+        repository.create(record1);
+        repository.create(record2);
 
         //Act
-        Page<UtilityRecord> records = repository.findAllByNameCaseInsensitive(nonExistingName, PageRequest.of(0, 10));
+        Page<UtilityStorage> records = repository.findAllByNameCaseInsensitive(nonExistingName, PageRequest.of(0, 10));
 
         //Assert
         assertEquals(0, records.getTotalElements());
         assertTrue(records.getContent().isEmpty());
     }
 
-    private void setField(Object object, String fieldName, Object value) throws Exception {
-        Field field = object.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(object, value);
-    }
 }

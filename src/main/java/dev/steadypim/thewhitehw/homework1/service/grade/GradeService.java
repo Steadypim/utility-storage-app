@@ -13,5 +13,5 @@ public interface GradeService {
 
     void delete(int id);
 
-    List<Grade> findAllById(int recordId);
+    List<Grade> findAllByRecordId(int recordId);
 }

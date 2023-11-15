@@ -7,7 +7,6 @@ import dev.steadypim.thewhitehw.homework1.api.grade.mapper.GradeMapper;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +39,7 @@ public class GradeController {
 
     @GetMapping("{recordId}")
     @Operation(description = "Получение всех оценок записи по ее id")
-    @ApiResponse(description = "Данная запись не имеет оценок", responseCode = "404")
     public List<GradeDTO> findAllByRecordId(@PathVariable("recordId") int recordId){
-        return gradeMapper.toDtoList(gradeService.findAllById(recordId));
+        return gradeMapper.toDtoList(gradeService.findAllByRecordId(recordId));
     }
 }

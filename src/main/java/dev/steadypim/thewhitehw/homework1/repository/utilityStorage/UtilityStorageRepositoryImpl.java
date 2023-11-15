@@ -1,46 +1,38 @@
 package dev.steadypim.thewhitehw.homework1.repository.utilityStorage;
 
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
 public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
-    private UtilityStorage utilityStorage;
-    private final String filePath;
-    private AtomicInteger idCounter;
+    private final Map<Integer, UtilityStorage> storage;
+    private final AtomicInteger idCounter;
 
-    public UtilityStorageRepositoryImpl(@Value("${data.file.path}") String filePath) {
-        this.utilityStorage = null;
-        this.filePath = filePath;
-    }
-  
-    @PostConstruct
-    private void initializeUtilityStorage(){
-        this.utilityStorage = new UtilityStorage(filePath);
+    public UtilityStorageRepositoryImpl() {
+        this.storage = new HashMap<>();
         int maxId = getMaxRecordId();
         idCounter = new AtomicInteger(maxId + 1);
     }
 
     @Override
-    public UtilityRecord findById(int id) {
-        return utilityStorage.getStorage().get(id);
+    public UtilityStorage findById(int id) {
+        return storage.get(id);
     }
 
     @Override
-    public Page<UtilityRecord> findAllByNameCaseInsensitive(String name, Pageable pageable) {
+    public Page<UtilityStorage> findAllByNameCaseInsensitive(String name, Pageable pageable) {
         String lowerCaseName = name.toLowerCase();
-        List<UtilityRecord> allRecords = new ArrayList<>(utilityStorage.getStorage().values());
-        List<UtilityRecord> filteredRecords = allRecords.stream()
+        List<UtilityStorage> allRecords = new ArrayList<>(storage.values());
+        List<UtilityStorage> filteredRecords = allRecords.stream()
                 .filter(record -> record.getName().toLowerCase().contains(lowerCaseName))
                 .collect(Collectors.toList());
 
@@ -51,31 +43,31 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     }
 
     @Override
-    public UtilityRecord create(UtilityRecord record) {
+    public UtilityStorage create(UtilityStorage record) {
         int id = idCounter.getAndIncrement();
         record.setId(id);
-        utilityStorage.getStorage().put(id, record);
-        return utilityStorage.getStorage().get(record.getId());
+        storage.put(id, record);
+        return storage.get(record.getId());
     }
 
     @Override
-    public void delete(UtilityRecord record) {
-        utilityStorage.getStorage().remove(record.getId());
+    public void delete(UtilityStorage record) {
+        storage.remove(record.getId());
     }
 
-    public void update(UtilityRecord record, int id){
-        UtilityRecord existingRecord = utilityStorage.getStorage().get(id);
+    public void update(UtilityStorage record, int id){
+        UtilityStorage existingRecord = storage.get(id);
 
         existingRecord.setName(record.getName());
         existingRecord.setDescription(record.getDescription());
         existingRecord.setLink(record.getLink());
 
-        utilityStorage.getStorage().put(id, existingRecord);
+        storage.put(id, existingRecord);
     }
 
     public int getMaxRecordId(){
         int maxId = 0;
-        for(UtilityRecord record : utilityStorage.getStorage().values()){
+        for(UtilityStorage record : storage.values()){
             if(record.getId() > maxId){
                 maxId = record.getId();
             }

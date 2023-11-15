@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.service.utilityStorage;
 
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
 import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
@@ -20,17 +20,17 @@ import java.util.Optional;
 public class UtilityStorageService {
     private final UtilityStorageRepositoryImpl repository;
 
-    public UtilityRecord findRecordById(int id) {
+    public UtilityStorage findRecordById(int id) {
         return Optional.ofNullable(repository.findById(id))
                 .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
     }
 
-    public Page<UtilityRecord> findAllRecordsByName(String name, Pageable pageable) {
+    public Page<UtilityStorage> findAllRecordsByName(String name, Pageable pageable) {
         return repository.findAllByNameCaseInsensitive(name, pageable);
     }
 
-    public UtilityRecord createRecord(CreateUtilityRecordArgument argument){
-        UtilityRecord record = UtilityRecord.builder()
+    public UtilityStorage createRecord(CreateUtilityRecordArgument argument){
+        UtilityStorage record = UtilityStorage.builder()
                 .name(argument.getName())
                 .link(argument.getLink())
                 .description(argument.getDescription())
@@ -44,7 +44,7 @@ public class UtilityStorageService {
     }
 
     public void updateRecordById(UpdateUtilityRecordArgument dto, int id){
-        UtilityRecord record = UtilityRecord.builder()
+        UtilityStorage record = UtilityStorage.builder()
                 .id(id)
                 .name(dto.getName())
                 .description(dto.getDescription())

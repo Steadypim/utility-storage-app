@@ -31,7 +31,7 @@ public class GradeRepositoryImpl implements GradeRepository{
     }
 
     @Override
-    public List<Grade> findAllById(int recordId) {
+    public List<Grade> findAllByRecordId(int recordId) {
         return grades.values().stream()
                 .filter(grade -> grade.getRecordId() == recordId)
                 .collect(Collectors.toList());

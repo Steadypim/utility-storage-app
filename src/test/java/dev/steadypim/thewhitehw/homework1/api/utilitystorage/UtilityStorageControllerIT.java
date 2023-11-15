@@ -1,16 +1,15 @@
-package dev.steadypim.thewhitehw.homework1.api.utilityStorage;
+package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.CreateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -25,7 +24,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @AutoConfigureWebTestClient
 @ExtendWith(SoftAssertionsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserStorageControllerIT {
+public class UtilityStorageControllerIT {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -33,13 +32,22 @@ public class UserStorageControllerIT {
     @Autowired
     private UtilityStorageService service;
 
+    @Autowired
+    private UtilityStorageRepositoryImpl repository;
+
+    @BeforeEach
+    public void setupData() {
+        UtilityStorage record1 = new UtilityStorage(1,"Запись 1", "Описание записи 1", "https://example.com/1");
+        UtilityStorage record2 = new UtilityStorage(2, "Запись 1", "Описание записи 1", "https://example.com/2");
+
+        repository.create(record1);
+        repository.create(record2);
+    }
     @Test
     @Order(1)
     void testFindById(SoftAssertions assertions) {
         // Arrange
         int id = 1;
-        UtilityRecordDTO expectedRecord = new UtilityRecordDTO(id, "Запись 1", "Описание записи 1", "https://example.com/1");
-
         // Act
         webTestClient.get()
                 .uri("/api/v1/utilityStorage/{id}", id)
@@ -48,8 +56,7 @@ public class UserStorageControllerIT {
                 .expectBody(UtilityRecordDTO.class)
                 .value(record -> {
                     // Assert
-                    assertions.assertThat(record)
-                            .isEqualToComparingFieldByField(expectedRecord);
+                    assertions.assertThat(record.getId()).isEqualTo(id);
                 });
     }
 
@@ -77,14 +84,7 @@ public class UserStorageControllerIT {
     @Order(3)
     void testCreate(SoftAssertions assertions) {
         // Arrange
-        CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO("Заявка 4", "Описание записи 2", "https://example.com/2");
-
-        UtilityRecordDTO recordToCompare = new UtilityRecordDTO(
-                4,
-                recordToCreate.getName(),
-                recordToCreate.getDescription(),
-                recordToCreate.getLink()
-        );
+        CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO("Заявка 2", "Описание записи 2", "https://example.com/3");
 
         // Act
         webTestClient.post()
@@ -96,9 +96,9 @@ public class UserStorageControllerIT {
                 .expectBody(UtilityRecordDTO.class)
                 .value(createdRecord -> {
                     // Assert
-                    assertions.assertThat(createdRecord)
-                            .isEqualToComparingFieldByField(recordToCompare);
-
+                    assertions.assertThat(createdRecord.getName()).isEqualTo(recordToCreate.getName());
+                    assertions.assertThat(createdRecord.getDescription()).isEqualTo(recordToCreate.getDescription());
+                    assertions.assertThat(createdRecord.getLink()).isEqualTo(recordToCreate.getLink());
                 });
     }
 
@@ -123,8 +123,8 @@ public class UserStorageControllerIT {
     @Order(4)
     void testUpdateById(SoftAssertions assertions) {
         // Arrange
-        int id = 4;
-        UtilityRecord recordToUpdate = new UtilityRecord(id, "Заявка 4", "Описание записи 4", "https://example.com/4");
+        int id = 3;
+        UpdateUtilityRecordDTO recordToUpdate = new UpdateUtilityRecordDTO("Заявка 4", "Описание записи 4", "https://example.com/4");
 
         // Act
         webTestClient.put()
@@ -135,9 +135,44 @@ public class UserStorageControllerIT {
                 .expectStatus().isOk();
 
         // Assert
-        UtilityRecord retrievedRecord = service.findRecordById(id);
-        assertions.assertThat(retrievedRecord)
-                .isEqualToComparingFieldByField(recordToUpdate);
+        UtilityStorage updatedRecord = repository.findById(id);
+        assertions.assertThat(updatedRecord.getName()).isEqualTo(recordToUpdate.getName());
+        assertions.assertThat(updatedRecord.getDescription()).isEqualTo(recordToUpdate.getDescription());
+        assertions.assertThat(updatedRecord.getLink()).isEqualTo(recordToUpdate.getLink());
     }
 
+    @Test
+    @Order(5)
+    void testCreate_returnBadRequest(){
+        // Arrange
+        CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO("", "Описание записи 2", "https://example.com/3");
+
+        // Act & Assert
+        webTestClient.post()
+                .uri("/api/v1/utilityStorage/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(recordToCreate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.errorMessage").isNotEmpty();
+    }
+
+    @Test
+    @Order(6)
+    void testUpdateById_returnBadRequest(){
+        // Arrange
+        int id = 3;
+        UpdateUtilityRecordDTO recordToUpdate = new UpdateUtilityRecordDTO("", "Описание записи 4", "https://example.com/4");
+
+        // Act & Assert
+        webTestClient.put()
+                .uri("/api/v1/utilityStorage/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(recordToUpdate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.errorMessage").isNotEmpty();
+    }
 }

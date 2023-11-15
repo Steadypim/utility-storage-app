@@ -1,11 +1,10 @@
 package dev.steadypim.thewhitehw.homework1.action.create.grade;
 
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeServiceImpl;
 import dev.steadypim.thewhitehw.homework1.service.grade.argument.CreateGradeArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +17,7 @@ public class CreateGradeAction {
     private final GradeServiceImpl gradeService;
 
     public Grade create(CreateGradeActionArgument argument) {
-        UtilityRecord record = storageService.findRecordById(argument.getRecordId());
+        UtilityStorage record = storageService.findRecordById(argument.getRecordId());
 
         return gradeService.create(CreateGradeArgument.builder()
                 .comment(argument.getComment())

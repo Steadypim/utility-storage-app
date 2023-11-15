@@ -1,15 +1,16 @@
-package dev.steadypim.thewhitehw.homework1.api.utilityStorage;
+package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.CreateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UpdateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.dtos.UtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityRecord;
-import dev.steadypim.thewhitehw.homework1.api.utilityStorage.mapper.UtilityStorageMapper;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper.UtilityStorageMapper;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,8 +41,8 @@ public class UtilityStorageController {
     @GetMapping("name")
     @Operation(description = "Поиск записей по имени")
     public Page<UtilityRecordDTO> findAllByName(@RequestParam("name") String name,
-                                                @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
-        Page<UtilityRecord> records = service.findAllRecordsByName(name, pageable);
+                                                @PageableDefault(sort = "name") Pageable pageable) {
+        Page<UtilityStorage> records = service.findAllRecordsByName(name, pageable);
         List<UtilityRecordDTO> dto = mapper.toDtoList(records.getContent());
 
         return new PageImpl<>(dto, pageable, records.getTotalElements());
@@ -49,7 +50,7 @@ public class UtilityStorageController {
 
     @PostMapping("create")
     @Operation(description = "Добавление записи")
-    public UtilityRecordDTO create(@RequestBody CreateUtilityRecordDTO dto) {
+    public UtilityRecordDTO create(@RequestBody @Valid CreateUtilityRecordDTO dto) {
         CreateUtilityRecordArgument record = mapper.toCreateArgument(dto);
         return mapper.toDto(service.createRecord(record));
     }
@@ -63,7 +64,7 @@ public class UtilityStorageController {
 
     @PutMapping("{id}")
     @Operation(description = "Изменение записи по id")
-    public void updateById(@RequestBody UpdateUtilityRecordDTO dto, @PathVariable("id") int id) {
+    public void updateById(@RequestBody @Valid UpdateUtilityRecordDTO dto, @PathVariable("id") int id) {
         service.updateRecordById(mapper.toUpdateArgument(dto), id);
     }
 }
