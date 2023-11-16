@@ -15,12 +15,10 @@ import java.util.stream.Collectors;
 @Repository
 public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
     private final Map<Integer, UtilityStorage> storage;
-    private final AtomicInteger idCounter;
+    private final AtomicInteger idCounter = new AtomicInteger(1);
 
     public UtilityStorageRepositoryImpl() {
         this.storage = new HashMap<>();
-        int maxId = getMaxRecordId();
-        idCounter = new AtomicInteger(maxId + 1);
     }
 
     @Override
@@ -63,15 +61,5 @@ public class UtilityStorageRepositoryImpl implements UtilityStorageRepository{
         existingRecord.setLink(record.getLink());
 
         storage.put(id, existingRecord);
-    }
-
-    public int getMaxRecordId(){
-        int maxId = 0;
-        for(UtilityStorage record : storage.values()){
-            if(record.getId() > maxId){
-                maxId = record.getId();
-            }
-        }
-        return maxId;
     }
 }

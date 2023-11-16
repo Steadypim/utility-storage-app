@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 public class ErrorDTO {
-    private List<String> errorMessage;
+    private List<String> errorMessages;
 }

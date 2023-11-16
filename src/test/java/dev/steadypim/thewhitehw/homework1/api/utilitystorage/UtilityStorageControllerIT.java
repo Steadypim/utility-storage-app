@@ -155,7 +155,7 @@ public class UtilityStorageControllerIT {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty();
+                .jsonPath("$.errorMessages").isNotEmpty();
     }
 
     @Test
@@ -173,6 +173,6 @@ public class UtilityStorageControllerIT {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty();
+                .jsonPath("$.errorMessages").isNotEmpty();
     }
 }

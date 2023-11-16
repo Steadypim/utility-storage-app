@@ -1,7 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.repository.grade;
 
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,12 +14,7 @@ import java.util.stream.Collectors;
 public class GradeRepositoryImpl implements GradeRepository{
 
     private final Map<Integer, Grade> grades;
-    private AtomicInteger idCounter;
-
-    @PostConstruct
-    public void initializeCounter(){
-        idCounter = new AtomicInteger(1);
-    }
+    private final AtomicInteger idCounter = new AtomicInteger(1);
 
     @Override
     public Grade create(Grade grade) {

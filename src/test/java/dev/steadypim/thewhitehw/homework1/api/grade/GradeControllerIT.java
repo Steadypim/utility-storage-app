@@ -71,7 +71,7 @@ public class GradeControllerIT {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty();
+                .jsonPath("$.errorMessages").isNotEmpty();
     }
 
     @Test
