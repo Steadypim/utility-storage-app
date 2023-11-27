@@ -5,8 +5,7 @@ import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import org.mapstruct.Mapper;
-
-import java.util.List;
+import org.mapstruct.Mapping;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
@@ -15,7 +14,6 @@ public interface GradeMapper {
 
     CreateGradeActionArgument toCreateActionArgument(CreateGradeDTO dto);
 
+    @Mapping(source = "utilityStorage.id", target = "recordId")
     GradeDTO toDto(Grade grade);
-
-    List<GradeDTO> toDtoList(List<Grade> grades);
 }

@@ -3,8 +3,8 @@ package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper.UtilityStorageMapper;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,13 +13,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Контроллер для работы с хранилищем полезностей")
 @RestController
@@ -41,11 +37,21 @@ public class UtilityStorageController {
     @GetMapping("name")
     @Operation(description = "Поиск записей по имени")
     public Page<UtilityRecordDTO> findAllByName(@RequestParam("name") String name,
-                                                @PageableDefault(sort = "name") Pageable pageable) {
-        Page<UtilityStorage> records = service.findAllRecordsByName(name, pageable);
-        List<UtilityRecordDTO> dto = mapper.toDtoList(records.getContent());
+                                                @RequestParam(value = "sort", defaultValue = "name") String sortField,
+                                                @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
+                                                Pageable pageable) {
+        Page<UtilityStorage> resultPage = service.findAllRecordsByName(name, sortField, sortDirection, pageable);
+        return resultPage.map(mapper::toDto);
+    }
 
-        return new PageImpl<>(dto, pageable, records.getTotalElements());
+    @GetMapping("desc")
+    @Operation(description = "Поиск записей по описанию")
+    public Page<UtilityRecordDTO> findAllByDescription(@RequestParam("desc") String description,
+                                                       @RequestParam(value = "sort", defaultValue = "name") String sortField,
+                                                       @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
+                                                       Pageable pageable){
+        Page<UtilityStorage> resultPage = service.findAllRecordsByDescription(description, sortField, sortDirection, pageable);
+        return resultPage.map(mapper::toDto);
     }
 
     @PostMapping("create")
