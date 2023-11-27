@@ -1,7 +1,7 @@
 package dev.steadypim.thewhitehw.homework1.repository;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UtilityStorageRepositoryImplTest {
-    private UtilityStorageRepository repository;
+    private UtilityStorageRepositoryImpl repository;
 
     @BeforeEach
     void setUp() {
@@ -56,7 +56,7 @@ class UtilityStorageRepositoryImplTest {
         repository.create(record1);
         repository.create(record2);
         //Act
-        Page<UtilityStorage> records = repository.findAllByNameIgnoreCase(existingName, PageRequest.of(0, 10));
+        Page<UtilityStorage> records = repository.findAllByNameCaseInsensitive(existingName, PageRequest.of(0, 10));
 
         //Assert
         assertEquals(records.getTotalElements(), 2);
@@ -75,7 +75,7 @@ class UtilityStorageRepositoryImplTest {
         repository.create(record2);
 
         //Act
-        Page<UtilityStorage> records = repository.findAllByNameIgnoreCase(nonExistingName, PageRequest.of(0, 10));
+        Page<UtilityStorage> records = repository.findAllByNameCaseInsensitive(nonExistingName, PageRequest.of(0, 10));
 
         //Assert
         assertEquals(0, records.getTotalElements());

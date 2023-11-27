@@ -1,27 +1,16 @@
 package dev.steadypim.thewhitehw.homework1.entity;
 
-import dev.steadypim.thewhitehw.homework1.general.entitypk.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.*;
-
-import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.FetchType.EAGER;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  * Оценка
  */
-@Entity
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Grade extends BaseEntity {
-    @ManyToOne(cascade = ALL, fetch = EAGER)
-    @JoinColumn(name = "record_id", referencedColumnName = "id", updatable = false, nullable = false)
-    private UtilityStorage utilityStorage;
+public class Grade {
+    private int id;
+    private int recordId;
     private int grade;
     private String comment;
 }

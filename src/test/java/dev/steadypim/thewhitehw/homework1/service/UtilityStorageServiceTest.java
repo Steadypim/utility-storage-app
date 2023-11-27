@@ -2,7 +2,7 @@ package dev.steadypim.thewhitehw.homework1.service;
 
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.UpdateUtilityRecordArgument;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 class UtilityStorageServiceTest {
 
     @Mock
-    private UtilityStorageRepository repository;
+    private UtilityStorageRepositoryImpl repository;
 
     @InjectMocks
     private UtilityStorageService service;
@@ -90,7 +90,7 @@ class UtilityStorageServiceTest {
         Page<UtilityStorage> expectedPage = new PageImpl<>(records, pageable, 1);
 
         // Mock repository behavior
-        when(repository.findAllByNameIgnoreCase(eq(name), eq(pageable))).thenReturn(expectedPage);
+        when(repository.findAllByNameCaseInsensitive(eq(name), eq(pageable))).thenReturn(expectedPage);
 
         // Act
         Page<UtilityStorage> result = service.findAllRecordsByName(name, pageable);

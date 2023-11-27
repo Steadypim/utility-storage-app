@@ -5,7 +5,7 @@ import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityR
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -33,7 +33,7 @@ public class UtilityStorageControllerIT {
     private UtilityStorageService service;
 
     @Autowired
-    private UtilityStorageRepository repository;
+    private UtilityStorageRepositoryImpl repository;
 
     @BeforeEach
     public void setupData() {

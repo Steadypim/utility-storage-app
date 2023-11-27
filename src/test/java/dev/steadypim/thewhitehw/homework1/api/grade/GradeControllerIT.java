@@ -3,7 +3,7 @@ package dev.steadypim.thewhitehw.homework1.api.grade;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepositoryImpl;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ public class GradeControllerIT {
     private WebTestClient webTestClient;
 
     @Autowired
-    private UtilityStorageRepository repository;
+    private UtilityStorageRepositoryImpl repository;
 
     @BeforeEach
     void setupData() {

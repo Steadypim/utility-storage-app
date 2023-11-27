@@ -4,11 +4,9 @@ import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.repository.grade.GradeRepository;
 import dev.steadypim.thewhitehw.homework1.service.grade.argument.CreateGradeArgument;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,27 +17,19 @@ public class GradeServiceImpl implements GradeService{
     public Grade create(CreateGradeArgument argument) {
         Grade grade = Grade.builder()
                 .comment(argument.getComment())
+                .recordId(argument.getRecordId())
                 .grade(argument.getGrade())
                 .build();
-        return repository.save(grade);
+        return repository.create(grade);
     }
 
     @Override
     public void delete(int id) {
-        repository.deleteById(id);
+        repository.delete(id);
     }
 
     @Override
-    public Page<Grade> findAllByRecordId(int recordId, String sortField, String sortDirection, Pageable pageable) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return repository.findAllByUtilityStorage_Id(recordId, pageable);
-    }
-
-    @Override
-    public Page<Grade> findAllGradesByGrade(int grade, String sortField, String sortDirection, Pageable pageable) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return repository.findAllByGrade(grade, pageable);
+    public List<Grade> findAllByRecordId(int recordId) {
+        return repository.findAllByRecordId(recordId);
     }
 }
