@@ -1,16 +1,18 @@
 package dev.steadypim.thewhitehw.homework1.repository.grade;
 
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Репозиторий для работы с данными в Grade
  */
-public interface GradeRepository {
-    Grade create(Grade grade);
+@Repository
+public interface GradeRepository extends JpaRepository<Grade, Integer> {
+    Page<Grade> findAllByUtilityStorage_Id(int recordId, Pageable pageable);
 
-    List<Grade> findAllByRecordId(int recordId);
-
-    void delete(int id);
+    Page<Grade> findAllByGrade(int grade, Pageable pageable);
 }
+

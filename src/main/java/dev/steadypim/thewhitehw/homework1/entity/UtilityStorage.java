@@ -1,19 +1,19 @@
 package dev.steadypim.thewhitehw.homework1.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import dev.steadypim.thewhitehw.homework1.general.entitypk.BaseEntity;
+import jakarta.persistence.Entity;
+import lombok.*;
 
 /**
  * Запись в хранилище
  */
-@Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
-public class UtilityStorage {
-    private int id;
+public class UtilityStorage extends BaseEntity {
     private String name;
     private String description;
     private String link;
