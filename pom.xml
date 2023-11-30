@@ -110,6 +110,10 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -135,7 +139,22 @@
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.processor.version}</version>
                         </path>
+                        <path>
+                            <groupId>com.querydsl</groupId>
+                            <artifactId>querydsl-apt</artifactId>
+                            <version>${querydsl.version}</version>
+                            <classifier>jakarta</classifier>
+                        </path>
+                        <path>
+                            <groupId>jakarta.persistence</groupId>
+                            <artifactId>jakarta.persistence-api</artifactId>
+                            <version>3.1.0</version>
+                        </path>
                     </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Aquerydsl.entityAccessors=true</arg>
+                        <arg>-Aquerydsl.useFields=false</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

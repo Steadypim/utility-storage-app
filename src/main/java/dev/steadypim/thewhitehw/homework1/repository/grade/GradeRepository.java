@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Integer> {
-    Page<Grade> findAllByUtilityStorage_Id(int recordId, Pageable pageable);
+    Page<Grade> findAllByUtilityStorageId(int utilityStorageId, Pageable pageable);
 
     Page<Grade> findAllByGrade(int grade, Pageable pageable);
 }

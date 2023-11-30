@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CreateGradeArgument {
-    private int recordId;
+    private int utilityStorageId;
     private int grade;
     private String comment;
 }

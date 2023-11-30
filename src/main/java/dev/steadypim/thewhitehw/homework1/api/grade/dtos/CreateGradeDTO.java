@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class CreateGradeDTO {
     @NotNull(message = "id записи не указан")
-    private int recordId;
+    private int utilityStorageId;
 
     @NotNull(message = "оценка не указана")
     @Min(value = 1, message = "оценка не может быть меньше 1")

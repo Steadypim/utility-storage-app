@@ -1,6 +1,7 @@
 package dev.steadypim.thewhitehw.homework1.service.grade;
 
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
+import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.repository.grade.GradeRepository;
 import dev.steadypim.thewhitehw.homework1.service.grade.argument.CreateGradeArgument;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ public class GradeServiceImpl implements GradeService{
 
     private final GradeRepository repository;
     @Override
-    public Grade create(CreateGradeArgument argument) {
+    public Grade create(CreateGradeArgument argument, UtilityStorage record) {
         Grade grade = Grade.builder()
+                .utilityStorage(record)
                 .comment(argument.getComment())
                 .grade(argument.getGrade())
                 .build();
@@ -30,10 +32,10 @@ public class GradeServiceImpl implements GradeService{
     }
 
     @Override
-    public Page<Grade> findAllByRecordId(int recordId, String sortField, String sortDirection, Pageable pageable) {
+    public Page<Grade> findAllByRecordId(int utilityStorageId, String sortField, String sortDirection, Pageable pageable) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return repository.findAllByUtilityStorage_Id(recordId, pageable);
+        return repository.findAllByUtilityStorageId(utilityStorageId, pageable);
     }
 
     @Override

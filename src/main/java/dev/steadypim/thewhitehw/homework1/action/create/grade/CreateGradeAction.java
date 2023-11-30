@@ -17,12 +17,12 @@ public class CreateGradeAction {
     private final GradeServiceImpl gradeService;
 
     public Grade create(CreateGradeActionArgument argument) {
-        UtilityStorage record = storageService.findRecordById(argument.getRecordId());
+        UtilityStorage record = storageService.findRecordById(argument.getUtilityStorageId());
 
         return gradeService.create(CreateGradeArgument.builder()
                 .comment(argument.getComment())
-                .recordId(record.getId())
+                .utilityStorageId(record.getId())
                 .grade(argument.getGrade())
-                .build());
+                .build(),record);
     }
 }

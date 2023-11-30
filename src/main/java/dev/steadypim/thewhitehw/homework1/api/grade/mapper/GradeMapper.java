@@ -14,6 +14,6 @@ public interface GradeMapper {
 
     CreateGradeActionArgument toCreateActionArgument(CreateGradeDTO dto);
 
-    @Mapping(source = "utilityStorage.id", target = "recordId")
+    @Mapping(source = "utilityStorage.id", target = "utilityStorageId")
     GradeDTO toDto(Grade grade);
 }

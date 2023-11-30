@@ -34,23 +34,15 @@ public class UtilityStorageController {
         return mapper.toDto(service.findRecordById(id));
     }
 
-    @GetMapping("name")
-    @Operation(description = "Поиск записей по имени")
-    public Page<UtilityRecordDTO> findAllByName(@RequestParam("name") String name,
-                                                @RequestParam(value = "sort", defaultValue = "name") String sortField,
-                                                @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
-                                                Pageable pageable) {
-        Page<UtilityStorage> resultPage = service.findAllRecordsByName(name, sortField, sortDirection, pageable);
-        return resultPage.map(mapper::toDto);
-    }
-
-    @GetMapping("desc")
-    @Operation(description = "Поиск записей по описанию")
-    public Page<UtilityRecordDTO> findAllByDescription(@RequestParam("desc") String description,
-                                                       @RequestParam(value = "sort", defaultValue = "name") String sortField,
-                                                       @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
-                                                       Pageable pageable){
-        Page<UtilityStorage> resultPage = service.findAllRecordsByDescription(description, sortField, sortDirection, pageable);
+    @GetMapping("search")
+    @Operation(description = "Поиск записей по имени и/или описанию")
+    public Page<UtilityRecordDTO> searchRecords(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "desc", required = false) String description,
+            @RequestParam(value = "sort", defaultValue = "name") String sortField,
+            @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
+            Pageable pageable) {
+        Page<UtilityStorage> resultPage = service.searchRecords(name, description, sortField, sortDirection, pageable);
         return resultPage.map(mapper::toDto);
     }
 

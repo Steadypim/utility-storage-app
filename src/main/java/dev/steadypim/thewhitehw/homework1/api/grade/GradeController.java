@@ -47,7 +47,7 @@ public class GradeController {
         return resultPage.map(gradeMapper::toDto);
     }
 
-    @GetMapping("grade")
+    @GetMapping()
     @Operation(description = "Получение всех оценок с заданным значением")
     public Page<GradeDTO> findAllGradesByGrade(@RequestParam("grade") int grade,
                                                @RequestParam(value = "sort", defaultValue = "grade") String sortField,

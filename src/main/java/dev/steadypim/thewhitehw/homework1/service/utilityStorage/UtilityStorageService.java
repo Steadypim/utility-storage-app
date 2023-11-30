@@ -1,5 +1,7 @@
 package dev.steadypim.thewhitehw.homework1.service.utilityStorage;
 
+import com.querydsl.core.BooleanBuilder;
+import dev.steadypim.thewhitehw.homework1.entity.QUtilityStorage;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
 import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
@@ -27,16 +29,21 @@ public class UtilityStorageService {
                 .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
     }
 
-    public Page<UtilityStorage> findAllRecordsByName(String name, String sortField, String sortDirection, Pageable pageable) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return repository.findAllByNameIgnoreCase(name, pageable);
-    }
+    public Page<UtilityStorage> searchRecords(String name, String description, String sortField, String sortDirection, Pageable pageable) {
+        BooleanBuilder predicate = new BooleanBuilder();
 
-    public Page<UtilityStorage> findAllRecordsByDescription(String name, String sortField, String sortDirection, Pageable pageable){
+        if (name != null) {
+            predicate.and(QUtilityStorage.utilityStorage.name.equalsIgnoreCase(name));
+        }
+
+        if (description != null) {
+            predicate.and(QUtilityStorage.utilityStorage.description.eq(description));
+        }
+
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return repository.findAllByDescription(name, pageable);
+
+        return repository.findAll(predicate, pageable);
     }
 
     public UtilityStorage createRecord(CreateUtilityRecordArgument argument) {

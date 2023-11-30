@@ -20,7 +20,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @AllArgsConstructor
 public class Grade extends BaseEntity {
     @ManyToOne(cascade = ALL, fetch = EAGER)
-    @JoinColumn(name = "record_id", referencedColumnName = "id", updatable = false, nullable = false)
+    @JoinColumn(name = "utility_storage_id", referencedColumnName = "id", updatable = false, nullable = false)
     private UtilityStorage utilityStorage;
     private int grade;
     private String comment;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GradeDTO {
     private int id;
-    private int recordId;
+    private int utilityStorageId;
     private int grade;
     private String comment;
 }
