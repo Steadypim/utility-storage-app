@@ -1,18 +1,23 @@
 package dev.steadypim.thewhitehw.homework1.api.grade;
 
 import dev.steadypim.thewhitehw.homework1.action.create.grade.CreateGradeAction;
+import dev.steadypim.thewhitehw.homework1.api.grade.argiment.GradeSearchCriteriaArgument;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
+import dev.steadypim.thewhitehw.homework1.api.grade.dtos.SearchGradeResultDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.mapper.GradeMapper;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeService;
+import dev.steadypim.thewhitehw.homework1.service.grade.argument.SearchGradeArgument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @Tag(name = "Контроллер для работы с оценками")
 @RestController
@@ -37,23 +42,14 @@ public class GradeController {
         gradeService.delete(id);
     }
 
-    @GetMapping("{recordId}")
-    @Operation(description = "Получение всех оценок записи по ее id")
-    public Page<GradeDTO> findAllByRecordId(@PathVariable("recordId") int recordId,
-                                            @RequestParam(value = "sort", defaultValue = "grade") String sortField,
-                                            @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
-                                            Pageable pageable){
-        Page<Grade> resultPage = gradeService.findAllByRecordId(recordId, sortField, sortDirection, pageable);
-        return resultPage.map(gradeMapper::toDto);
-    }
+    @GetMapping("search")
+    @Operation(description = "Поиск оценок по имени и/или описанию")
+    public SearchGradeResultDTO searchGrades(
+            @ModelAttribute GradeSearchCriteriaArgument argument,
+            @PageableDefault(sort = "grade", direction = ASC) Pageable pageable) {
 
-    @GetMapping()
-    @Operation(description = "Получение всех оценок с заданным значением")
-    public Page<GradeDTO> findAllGradesByGrade(@RequestParam("grade") int grade,
-                                               @RequestParam(value = "sort", defaultValue = "grade") String sortField,
-                                               @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
-                                               Pageable pageable){
-        Page<Grade> resultPage = gradeService.findAllGradesByGrade(grade, sortField, sortDirection, pageable);
-        return resultPage.map(gradeMapper::toDto);
+        SearchGradeArgument searchGradeArgument = gradeMapper.toSearchArgument(argument, pageable);
+
+        return gradeMapper.toSearchResultDTO(gradeService.searchGrades(searchGradeArgument));
     }
 }

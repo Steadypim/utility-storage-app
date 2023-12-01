@@ -4,9 +4,10 @@ import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeServiceImpl;
 import dev.steadypim.thewhitehw.homework1.service.grade.argument.CreateGradeArgument;
-import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Component
@@ -16,13 +17,16 @@ public class CreateGradeAction {
     private final UtilityStorageService storageService;
     private final GradeServiceImpl gradeService;
 
+    @Transactional
     public Grade create(CreateGradeActionArgument argument) {
         UtilityStorage record = storageService.findRecordById(argument.getUtilityStorageId());
 
-        return gradeService.create(CreateGradeArgument.builder()
+        CreateGradeArgument createGradeArgument = CreateGradeArgument.builder()
                 .comment(argument.getComment())
-                .utilityStorageId(record.getId())
+                .utilityStorage(record)
                 .grade(argument.getGrade())
-                .build(),record);
+                .build();
+
+        return gradeService.create(createGradeArgument);
     }
 }

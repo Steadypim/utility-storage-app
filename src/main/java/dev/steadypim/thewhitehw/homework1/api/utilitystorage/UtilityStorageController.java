@@ -1,21 +1,25 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.argument.UtilityStorageSearchCriteriaArgument;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.SearchUtilityStorageResultDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper.UtilityStorageMapper;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
-import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
-import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageService;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.SearchUtilityRecordArgument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @Tag(name = "Контроллер для работы с хранилищем полезностей")
 @RestController
@@ -36,14 +40,13 @@ public class UtilityStorageController {
 
     @GetMapping("search")
     @Operation(description = "Поиск записей по имени и/или описанию")
-    public Page<UtilityRecordDTO> searchRecords(
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "desc", required = false) String description,
-            @RequestParam(value = "sort", defaultValue = "name") String sortField,
-            @RequestParam(value = "direction", defaultValue = "asc") String sortDirection,
-            Pageable pageable) {
-        Page<UtilityStorage> resultPage = service.searchRecords(name, description, sortField, sortDirection, pageable);
-        return resultPage.map(mapper::toDto);
+    public SearchUtilityStorageResultDTO searchRecords(
+            @ModelAttribute UtilityStorageSearchCriteriaArgument argument,
+            @PageableDefault(sort = "name", direction = ASC) Pageable pageable) {
+
+        SearchUtilityRecordArgument searchUtilityRecordArgument = mapper.toSearchArgument(argument, pageable);
+
+        return mapper.toSearchResultDTO(service.searchRecords(searchUtilityRecordArgument));
     }
 
     @PostMapping("create")

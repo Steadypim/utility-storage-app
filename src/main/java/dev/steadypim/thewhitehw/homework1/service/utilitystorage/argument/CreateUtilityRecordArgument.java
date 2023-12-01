@@ -1,4 +1,4 @@
-package dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument;
+package dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
