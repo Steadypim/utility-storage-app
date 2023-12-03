@@ -1,7 +1,7 @@
 package dev.steadypim.thewhitehw.homework1.api.grade.mapper;
 
 import dev.steadypim.thewhitehw.homework1.action.create.grade.CreateGradeActionArgument;
-import dev.steadypim.thewhitehw.homework1.api.grade.argiment.GradeSearchCriteriaArgument;
+import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.SearchGradeResultDTO;
@@ -19,10 +19,9 @@ public interface GradeMapper {
 
     CreateGradeActionArgument toCreateActionArgument(CreateGradeDTO dto);
 
-    @Mapping(source = "utilityStorage.id", target = "utilityStorageId")
     GradeDTO toDto(Grade grade);
 
-    SearchGradeArgument toSearchArgument(GradeSearchCriteriaArgument argument, Pageable pageable);
+    SearchGradeArgument toSearchArgument(GradeSearchCriteriaDTO argument, Pageable pageable);
     @Mapping(source = "resultPage.content", target = "grades")
     @Mapping(source = "resultPage.totalElements", target = "totalElements")
     SearchGradeResultDTO toSearchResultDTO(Page<Grade> resultPage);

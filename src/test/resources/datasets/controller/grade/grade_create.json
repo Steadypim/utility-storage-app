@@ -1,0 +1,16 @@
+{
+  "utility_storage": [
+    {
+      "name": "some name",
+      "description": "some description",
+      "link": "https://example.com/1"
+    }
+  ],
+  "grade": [
+    {
+      "utility_storage_id": 1,
+      "grade": 5,
+      "comment": "norm"
+    }
+  ]
+}

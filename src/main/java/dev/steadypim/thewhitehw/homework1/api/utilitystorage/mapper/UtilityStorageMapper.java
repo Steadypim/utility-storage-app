@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper;
 
-import dev.steadypim.thewhitehw.homework1.api.utilitystorage.argument.UtilityStorageSearchCriteriaArgument;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityStorageSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.SearchUtilityStorageResultDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
@@ -24,7 +24,7 @@ public interface UtilityStorageMapper {
 
     UpdateUtilityRecordArgument toUpdateArgument(UpdateUtilityRecordDTO dto);
 
-    SearchUtilityRecordArgument toSearchArgument(UtilityStorageSearchCriteriaArgument argument, Pageable pageable);
+    SearchUtilityRecordArgument toSearchArgument(UtilityStorageSearchCriteriaDTO argument, Pageable pageable);
 
 
     @Mapping(source = "resultPage.content", target = "records")

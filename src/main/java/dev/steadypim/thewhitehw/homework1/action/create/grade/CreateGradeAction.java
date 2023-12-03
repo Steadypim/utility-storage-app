@@ -8,11 +8,9 @@ import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageS
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 @Component
 @RequiredArgsConstructor
-@Validated
 public class CreateGradeAction {
     private final UtilityStorageService storageService;
     private final GradeServiceImpl gradeService;

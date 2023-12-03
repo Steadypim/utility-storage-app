@@ -1,49 +1,148 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
+import com.github.database.rider.spring.api.DBRider;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 @Testcontainers
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureWebTestClient
 @FieldDefaults(level = PRIVATE)
+@DBRider
 class UtilityStorageControllerIT {
+
     @Container
+    @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
 
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry){
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-        registry.add("spring.jpa.generate-ddl", () -> true);
-    }
 
     @Autowired
-    MockMvc mockMvc;
+    WebTestClient client;
+
+    @BeforeEach
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    public void cleanBeforeEach() {
+
+    }
+
 
     @Test
     @SneakyThrows
-    void findByIdTest(){
-        mockMvc.perform(get("/api/v1/utilityStorage/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(notNullValue()));
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_by_id.json")
+    void findByIdTest() {
+        //Act & Assert
+        client.get()
+                .uri("/api/v1/utilityStorage/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$").isNotEmpty()
+                .jsonPath("$.id").isEqualTo(1);
+
+    }
+
+    @Test
+    @SneakyThrows
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_create.json", cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("datasets/controller/utilitystorage/utility_storage_create__expected.json")
+    void createTest() {
+        //Arrange
+        CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO(
+                "name",
+                "description",
+                "link"
+        );
+
+        //Act & Assert
+        client.post()
+                .uri("/api/v1/utilityStorage/create")
+                .contentType(APPLICATION_JSON)
+                .bodyValue(recordToCreate)
+                .exchange()
+                .expectStatus()
+                .isOk();
+    }
+
+    @Test
+    @SneakyThrows
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_search.json")
+    void searchTest() {
+        //Act & Assert
+        client.get().uri(uriBuilder -> uriBuilder
+                        .path("/api/v1/utilityStorage/search")
+                        .queryParam("name", "snusLover")
+                        .queryParam("description", "pipi-pupu")
+                        .queryParam("sort", "id,desc")
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$").isNotEmpty()
+                .jsonPath("$.totalElements").isEqualTo(2)
+                .jsonPath("$.records[0].id").isEqualTo(2)
+                .jsonPath("$.records[0].name").isEqualTo("snusLover")
+                .jsonPath("$.records[0].description").isEqualTo("pipi-pupu")
+                .jsonPath("$.records[1].id").isEqualTo(1)
+                .jsonPath("$.records[1].name").isEqualTo("snusLover")
+                .jsonPath("$.records[1].description").isEqualTo("pipi-pupu");
+    }
+
+    @Test
+    @SneakyThrows
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_delete_by_id.json")
+    @ExpectedDataSet("datasets/controller/utilitystorage/utility_storage_delete__expected.json")
+    void deleteByIdTest() {
+        //Arrange
+        int id = 1;
+
+        client.delete()
+                .uri("/api/v1/utilityStorage/{id}", id)
+                .exchange()
+                .expectStatus().isOk();
+//
+//        client.get()
+//                .uri("/api/v1/utilityStorage/{id}", id)
+//                .exchange()
+//                .expectStatus().isNotFound()
+//                .expectBody()
+//                .jsonPath("$.errorMessages[0]").isEqualTo("Запись не найдена");
+    }
+
+    @Test
+    @SneakyThrows
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_update_by_id.json")
+    @ExpectedDataSet("datasets/controller/utilitystorage/utility_storage_update_by_id__expected.json")
+    void updateById() {
+        int id = 1;
+        UpdateUtilityRecordDTO recordToUpdate = new UpdateUtilityRecordDTO(
+                "updated name",
+                "updated description",
+                "updated link"
+        );
+
+        client.put()
+                .uri("/api/v1/utilityStorage/{id}", id)
+                .contentType(APPLICATION_JSON)
+                .bodyValue(recordToUpdate)
+                .exchange()
+                .expectStatus().isOk();
     }
 }

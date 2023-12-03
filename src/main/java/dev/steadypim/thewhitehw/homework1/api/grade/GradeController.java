@@ -1,9 +1,9 @@
 package dev.steadypim.thewhitehw.homework1.api.grade;
 
 import dev.steadypim.thewhitehw.homework1.action.create.grade.CreateGradeAction;
-import dev.steadypim.thewhitehw.homework1.api.grade.argiment.GradeSearchCriteriaArgument;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
+import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.SearchGradeResultDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.mapper.GradeMapper;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
@@ -43,12 +43,12 @@ public class GradeController {
     }
 
     @GetMapping("search")
-    @Operation(description = "Поиск оценок по имени и/или описанию")
+    @Operation(description = "Поиск оценок по имени и/или описанию для конкретной записи")
     public SearchGradeResultDTO searchGrades(
-            @ModelAttribute GradeSearchCriteriaArgument argument,
+            @ModelAttribute @Valid GradeSearchCriteriaDTO criteriaDTO,
             @PageableDefault(sort = "grade", direction = ASC) Pageable pageable) {
 
-        SearchGradeArgument searchGradeArgument = gradeMapper.toSearchArgument(argument, pageable);
+        SearchGradeArgument searchGradeArgument = gradeMapper.toSearchArgument(criteriaDTO, pageable);
 
         return gradeMapper.toSearchResultDTO(gradeService.searchGrades(searchGradeArgument));
     }

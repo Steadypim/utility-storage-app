@@ -1,110 +1,121 @@
-//package dev.steadypim.thewhitehw.homework1.api.grade;
-//
-//import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
-//import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
-//import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
-//import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
-//import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
-//import org.junit.jupiter.api.*;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.reactive.server.WebTestClient;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-//import static org.springframework.http.MediaType.APPLICATION_JSON;
-//
-//@SpringBootTest(webEnvironment = RANDOM_PORT)
-//@AutoConfigureWebTestClient
-//@ExtendWith(SoftAssertionsExtension.class)
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//public class GradeControllerIT {
-//    @Autowired
-//    private WebTestClient webTestClient;
-//
-//    @Autowired
-//    private UtilityStorageRepository repository;
-//
-//    @BeforeEach
-//    void setupData() {
-//        UtilityStorage record1 = new UtilityStorage(1, "Запись 1", "Описание записи 1", "https://example.com/1");
-//
-//        repository.create(record1);
-//    }
-//
-//    @Test
-//    @Order(1)
-//    void testCreate() {
-//        CreateGradeDTO dto = CreateGradeDTO.builder()
-//                .recordId(1)
-//                .comment("nice")
-//                .grade(3)
-//                .build();
-//
-//        GradeDTO createdGrade = webTestClient.post().uri("grade/create")
-//                .contentType(APPLICATION_JSON)
-//                .bodyValue(dto)
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody(GradeDTO.class)
-//                .returnResult().getResponseBody();
-//
-//        assert createdGrade != null;
-//        assertThat(createdGrade.getGrade()).isEqualTo(dto.getGrade());
-//        assertThat(createdGrade.getId()).isEqualTo(1);
-//        assertThat(createdGrade.getComment()).isEqualTo(dto.getComment());
-//    }
-//
-//    @Test
-//    @Order(2)
-//    void testCreate_returnBadRequest() {
-//        //Arrange
-//        CreateGradeDTO dto = CreateGradeDTO.builder().build();
-//
-//        //Act & Assert
-//        webTestClient.post().uri("/grade/create")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .bodyValue(dto)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$.errorMessages").isNotEmpty();
-//    }
-//
-//    @Test
-//    @Order(3)
-//    void testFindAllByRecordId() {
-//        //Arrange
-//        int recordId = 1;
-//
-//        //Act & Assert
-//        webTestClient.get().uri("/grade/{recordId}", recordId)
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody()
-//                .jsonPath("$[0]").isNotEmpty()
-//                .jsonPath("$[0].recordId").isEqualTo(recordId);
-//    }
-//
-//    @Test
-//    @Order(4)
-//    void testDelete() {
-//        //Arrange
-//        int id = 1;
-//        int recordId = 1;
-//
-//        //Act & Assert
-//        webTestClient.delete().uri("/grade/{id}", id)
-//                .exchange()
-//                .expectStatus().isOk();
-//
-//        webTestClient.get().uri("/grade/{recordId}", recordId)
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody()
-//                .jsonPath("$").isEmpty();
-//    }
-//}
+package dev.steadypim.thewhitehw.homework1.api.grade;
+
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
+import com.github.database.rider.spring.api.DBRider;
+import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
+import lombok.SneakyThrows;
+import lombok.experimental.FieldDefaults;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static lombok.AccessLevel.PRIVATE;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+@Testcontainers
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureWebTestClient
+@FieldDefaults(level = PRIVATE)
+@DBRider
+class GradeControllerIT {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
+
+    @Autowired
+    WebTestClient client;
+
+    @BeforeEach
+    @DataSet(cleanBefore = true)
+    public void cleanBeforeEach() {
+
+    }
+
+    @Test
+    @SneakyThrows
+    @DataSet("datasets/controller/grade/grade_create.json")
+    @ExpectedDataSet("datasets/controller/grade/grade_create__expected.json")
+    void testCreate() {
+        //Arrange
+        CreateGradeDTO dtoToCreate = CreateGradeDTO.builder()
+                .utilityStorageId(1)
+                .comment("kaif")
+                .grade(4)
+                .build();
+
+        //Act & Assert
+        client.post()
+                .uri("/grade/create")
+                .contentType(APPLICATION_JSON)
+                .bodyValue(dtoToCreate)
+                .exchange()
+                .expectStatus()
+                .isOk();
+    }
+
+    @Test
+    void testCreate_returnBadRequest() {
+        //Arrange
+        CreateGradeDTO dto = CreateGradeDTO.builder().build();
+
+        //Act & Assert
+        client.post().uri("/grade/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(dto)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.errorMessages").isNotEmpty();
+    }
+
+
+    @Test
+    @SneakyThrows
+    @DataSet("datasets/controller/grade/grade_search.json")
+    void testSearch() {
+        //Arrange
+        int recordId = 1;
+
+        //Act & Assert
+        client.get().uri(
+                        uriBuilder -> uriBuilder
+                                .path("/grade/search")
+                                .queryParam("recordId", 1)
+                                .queryParam("grade", 3)
+                                .queryParam("sort", "comment,desc")
+                                .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$").isNotEmpty()
+                .jsonPath("$.totalElements").isEqualTo(2)
+                .jsonPath("$.grades[0].comment").isEqualTo("wonderful")
+                .jsonPath("$.grades[0].id").isEqualTo(3)
+                .jsonPath("$.grades[1].comment").isEqualTo("AOAOAO")
+                .jsonPath("$.grades[1].id").isEqualTo(2);
+    }
+
+    @Test
+    @SneakyThrows
+    @DataSet("datasets/controller/grade/grade_delete.json")
+    @ExpectedDataSet("datasets/controller/grade/grade_delete__expected.json")
+    void testDelete() {
+        //Arrange
+        int id = 1;
+
+        //Act & Assert
+        client.delete().uri("/grade/{id}", id)
+                .exchange()
+                .expectStatus().isOk();
+    }
+}

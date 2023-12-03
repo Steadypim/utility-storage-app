@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
-import dev.steadypim.thewhitehw.homework1.api.utilitystorage.argument.UtilityStorageSearchCriteriaArgument;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityStorageSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.SearchUtilityStorageResultDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
@@ -41,10 +41,10 @@ public class UtilityStorageController {
     @GetMapping("search")
     @Operation(description = "Поиск записей по имени и/или описанию")
     public SearchUtilityStorageResultDTO searchRecords(
-            @ModelAttribute UtilityStorageSearchCriteriaArgument argument,
+            @ModelAttribute UtilityStorageSearchCriteriaDTO criteriaDTO,
             @PageableDefault(sort = "name", direction = ASC) Pageable pageable) {
 
-        SearchUtilityRecordArgument searchUtilityRecordArgument = mapper.toSearchArgument(argument, pageable);
+        SearchUtilityRecordArgument searchUtilityRecordArgument = mapper.toSearchArgument(criteriaDTO, pageable);
 
         return mapper.toSearchResultDTO(service.searchRecords(searchUtilityRecordArgument));
     }

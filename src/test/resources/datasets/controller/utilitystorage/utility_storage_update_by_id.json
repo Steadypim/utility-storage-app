@@ -1,0 +1,16 @@
+{
+  "utility_storage": [
+    {
+      "id": 1,
+      "name": "some name",
+      "description": "some description",
+      "link": "https://example.com/1"
+    },
+    {
+      "id": 2,
+      "name": "Test Utility",
+      "description": "Test Description",
+      "link": "https://example.com/2"
+    }
+  ]
+}

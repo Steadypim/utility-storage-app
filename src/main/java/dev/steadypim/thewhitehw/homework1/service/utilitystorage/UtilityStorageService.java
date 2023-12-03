@@ -13,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /**
  * Сервис хранилища
  */
@@ -64,15 +62,11 @@ public class UtilityStorageService {
 
     @Transactional
     public void updateRecordById(UpdateUtilityRecordArgument dto, int id) {
-        Optional<UtilityStorage> optionalStorage = repository.findById(id);
-        if (optionalStorage.isPresent()) {
-            UtilityStorage existingRecord = optionalStorage.get();
-            existingRecord.setName(dto.getName());
-            existingRecord.setDescription(dto.getDescription());
-            existingRecord.setLink(dto.getLink());
-            repository.save(existingRecord);
-        }else {
-            throw new EntityNotFoundException("Запись не найдена");
-        }
+        UtilityStorage existingRecord = findRecordById(id);
+
+        existingRecord.setName(dto.getName());
+        existingRecord.setDescription(dto.getDescription());
+        existingRecord.setLink(dto.getLink());
+        repository.save(existingRecord);
     }
 }

@@ -6,7 +6,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
-import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 
 /**
@@ -19,7 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Grade extends BaseEntity {
-    @ManyToOne(cascade = ALL, fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "utility_storage_id", referencedColumnName = "id", updatable = false, nullable = false)
     private UtilityStorage utilityStorage;
     private int grade;
