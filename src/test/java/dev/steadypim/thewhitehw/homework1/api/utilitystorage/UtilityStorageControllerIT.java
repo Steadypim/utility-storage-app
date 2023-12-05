@@ -7,7 +7,6 @@ import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityR
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -22,11 +21,11 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+@DBRider
 @Testcontainers
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureWebTestClient
 @FieldDefaults(level = PRIVATE)
-@DBRider
 class UtilityStorageControllerIT {
 
     @Container
@@ -36,12 +35,6 @@ class UtilityStorageControllerIT {
 
     @Autowired
     WebTestClient client;
-
-    @BeforeEach
-    @DataSet(cleanBefore = true, cleanAfter = true)
-    public void cleanBeforeEach() {
-
-    }
 
 
     @Test
@@ -61,8 +54,8 @@ class UtilityStorageControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_create.json", cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("datasets/controller/utilitystorage/utility_storage_create__expected.json")
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_create.json")
+    @ExpectedDataSet(value = "datasets/controller/utilitystorage/utility_storage_create__expected.json")
     void createTest() {
         //Arrange
         CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO(
@@ -117,13 +110,6 @@ class UtilityStorageControllerIT {
                 .uri("/api/v1/utilityStorage/{id}", id)
                 .exchange()
                 .expectStatus().isOk();
-//
-//        client.get()
-//                .uri("/api/v1/utilityStorage/{id}", id)
-//                .exchange()
-//                .expectStatus().isNotFound()
-//                .expectBody()
-//                .jsonPath("$.errorMessages[0]").isEqualTo("Запись не найдена");
     }
 
     @Test

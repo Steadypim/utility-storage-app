@@ -1,9 +1,4 @@
 {
   "utility_storage": [
-    {
-      "name": "some name",
-      "description": "some description",
-      "link": "https://example.com/1"
-    }
   ]
 }
