@@ -48,7 +48,7 @@ public class UtilityStorageService {
     public UtilityStorage createRecord(CreateUtilityRecordArgument argument) {
         UtilityStorage record = UtilityStorage.builder()
                 .name(argument.getName())
-                .link(argument.getLink())
+                .links(argument.getLinks())
                 .description(argument.getDescription())
                 .build();
         return repository.save(record);
@@ -66,7 +66,7 @@ public class UtilityStorageService {
 
         existingRecord.setName(dto.getName());
         existingRecord.setDescription(dto.getDescription());
-        existingRecord.setLink(dto.getLink());
+        existingRecord.setLinks(dto.getLinks());
         repository.save(existingRecord);
     }
 }

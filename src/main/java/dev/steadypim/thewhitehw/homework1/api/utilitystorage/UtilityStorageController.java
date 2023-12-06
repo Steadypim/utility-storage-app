@@ -1,5 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
+import dev.steadypim.thewhitehw.homework1.action.gelete.utilitystorage.DeleteUtilityStorageAction;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityStorageSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.SearchUtilityStorageResultDTO;
@@ -29,6 +30,7 @@ public class UtilityStorageController {
 
     private final UtilityStorageService service;
     private final UtilityStorageMapper mapper;
+    private final DeleteUtilityStorageAction utilityStorageAction;
 
 
     @GetMapping("{id}")
@@ -60,7 +62,7 @@ public class UtilityStorageController {
     @Operation(description = "Удаление записи по id")
     @ApiResponse(description = "Запись не найдена", responseCode = "404")
     public void deleteById(@PathVariable("id") int id) {
-        service.deleteRecordById(id);
+        utilityStorageAction.delete(id);
     }
 
     @PutMapping("{id}")

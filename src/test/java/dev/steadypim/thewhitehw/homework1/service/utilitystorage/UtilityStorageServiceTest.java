@@ -101,7 +101,7 @@ class UtilityStorageServiceTest {
     @Test
     void testCreateRecordThenReturnRecord() {
         // Arrange
-        CreateUtilityRecordArgument argument = new CreateUtilityRecordArgument("testName", "testDesc", "testLink");
+        CreateUtilityRecordArgument argument = new CreateUtilityRecordArgument("testName", "testDesc", List.of("testLink"));
         UtilityStorage expectedRecord = new UtilityStorage();
         when(repository.save(any(UtilityStorage.class))).thenReturn(expectedRecord);
 
@@ -138,7 +138,7 @@ class UtilityStorageServiceTest {
     void testUpdateRecordByIdWhenRecordExistsThenNoException() {
         // Arrange
         int id = 1;
-        UpdateUtilityRecordArgument argument = new UpdateUtilityRecordArgument("updatedName", "updatedDesc", "updatedLink");
+        UpdateUtilityRecordArgument argument = new UpdateUtilityRecordArgument("updatedName", "updatedDesc", List.of("updatedLink"));
         UtilityStorage existingRecord = new UtilityStorage();
         when(repository.findById(id)).thenReturn(Optional.of(existingRecord));
         when(repository.save(any(UtilityStorage.class))).thenReturn(existingRecord);
@@ -151,7 +151,7 @@ class UtilityStorageServiceTest {
     void testUpdateRecordByIdWhenRecordDoesNotExistThenThrowException() {
         // Arrange
         int id = 1;
-        UpdateUtilityRecordArgument argument = new UpdateUtilityRecordArgument("updatedName", "updatedDesc", "updatedLink");
+        UpdateUtilityRecordArgument argument = new UpdateUtilityRecordArgument("updatedName", "updatedDesc", List.of("updatedLink"));
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert

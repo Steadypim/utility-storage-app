@@ -35,6 +35,12 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
+    @Transactional
+    public void deleteAllByUtilityStorageId(int id) {
+        repository.deleteAllByUtilityStorageId(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<Grade> searchGrades(SearchGradeArgument argument) {
         BooleanBuilder predicate = new BooleanBuilder();

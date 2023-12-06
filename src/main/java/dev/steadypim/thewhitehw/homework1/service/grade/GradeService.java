@@ -13,5 +13,7 @@ public interface GradeService {
 
     void delete(int id);
 
+    void deleteAllByUtilityStorageId(int id);
+
     Page<Grade> searchGrades(SearchGradeArgument argument);
 }

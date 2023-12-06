@@ -1,46 +1,78 @@
 {
   "utility_storage": [
     {
+      "id": 1,
       "name": "some name",
-      "description": "some description",
-      "link": "https://example.com/1"
+      "description": "some description"
     },
     {
+      "id": 2,
       "name": "2nd name",
-      "description": "2nd description",
-      "link": "https://example.com/2"
+      "description": "2nd description"
     }
   ],
   "grade": [
     {
+      "id": 1,
       "utility_storage_id": 1,
       "grade": 5,
       "comment": "norm"
     },
     {
+      "id": 2,
       "utility_storage_id": 1,
       "grade": 3,
       "comment": "AOAOAO"
     },
     {
+      "id": 3,
       "utility_storage_id": 1,
       "grade": 3,
       "comment": "wonderful"
     },
     {
+      "id": 4,
       "utility_storage_id": 2,
       "grade": 5,
       "comment": "norm"
     },
     {
+      "id": 5,
       "utility_storage_id": 2,
       "grade": 5,
       "comment": "norm"
     },
     {
+      "id": 6,
       "utility_storage_id": 2,
       "grade": 5,
       "comment": "norm"
     }
-    ]
+  ],
+  "utility_storage_links": [
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/1"
+    },
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/2"
+    },
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/3"
+    },
+    {
+      "utility_storage_id": 2,
+      "link": "https://example.com/1"
+    },
+    {
+      "utility_storage_id": 2,
+      "link": "https://example.com/2"
+    },
+    {
+      "utility_storage_id": 2,
+      "link": "https://example.com/3"
+    }
+  ]
 }

@@ -17,6 +17,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.List;
+
 import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -61,7 +63,7 @@ class UtilityStorageControllerIT {
         CreateUtilityRecordDTO recordToCreate = new CreateUtilityRecordDTO(
                 "name",
                 "description",
-                "link"
+                List.of("https://example.com/1", "https://example.com/2", "https://example.com/3")
         );
 
         //Act & Assert
@@ -121,7 +123,7 @@ class UtilityStorageControllerIT {
         UpdateUtilityRecordDTO recordToUpdate = new UpdateUtilityRecordDTO(
                 "updated name",
                 "updated description",
-                "updated link"
+                List.of("updated link")
         );
 
         client.put()

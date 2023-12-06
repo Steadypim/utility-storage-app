@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Integer>, QuerydslPredicateExecutor<Grade> {
+    void deleteAllByUtilityStorageId(int id);
 }
 

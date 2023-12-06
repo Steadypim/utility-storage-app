@@ -1,16 +1,31 @@
 {
   "utility_storage": [
     {
+      "id": 1,
       "name": "some name",
-      "description": "some description",
-      "link": "https://example.com/1"
+      "description": "some description"
     }
   ],
   "grade": [
     {
+      "id": 2,
       "utility_storage_id": 1,
       "grade": 4,
       "comment": "kaif"
+    }
+  ],
+  "utility_storage_links": [
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/1"
+    },
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/2"
+    },
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/3"
     }
   ]
 }
