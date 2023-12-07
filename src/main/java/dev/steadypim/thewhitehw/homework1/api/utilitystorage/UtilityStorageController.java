@@ -1,11 +1,11 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
 import dev.steadypim.thewhitehw.homework1.action.gelete.utilitystorage.DeleteUtilityStorageAction;
-import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityStorageSearchCriteriaDTO;
+import dev.steadypim.thewhitehw.homework1.api.PageDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.SearchUtilityStorageResultDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityStorageSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper.UtilityStorageMapper;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageService;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.CreateUtilityRecordArgument;
@@ -42,7 +42,7 @@ public class UtilityStorageController {
 
     @GetMapping("search")
     @Operation(description = "Поиск записей по имени и/или описанию")
-    public SearchUtilityStorageResultDTO searchRecords(
+    public PageDTO<UtilityRecordDTO> searchRecords(
             @ModelAttribute UtilityStorageSearchCriteriaDTO criteriaDTO,
             @PageableDefault(sort = "name", direction = ASC) Pageable pageable) {
 

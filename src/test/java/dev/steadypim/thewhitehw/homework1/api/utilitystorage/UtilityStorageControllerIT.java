@@ -33,7 +33,7 @@ class UtilityStorageControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_by_id.json")
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_by_id.json", cleanBefore = true, cleanAfter = true)
     void findByIdTest() {
         //Act & Assert
         client.get()
@@ -48,7 +48,7 @@ class UtilityStorageControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_create.json")
+    @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet(value = "datasets/controller/utilitystorage/utility_storage_create__expected.json")
     void createTest() {
         //Arrange
@@ -70,7 +70,7 @@ class UtilityStorageControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_search.json")
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_search.json", cleanBefore = true, cleanAfter = true)
     void searchTest() {
         //Act & Assert
         client.get().uri(uriBuilder -> uriBuilder
@@ -84,17 +84,17 @@ class UtilityStorageControllerIT {
                 .expectBody()
                 .jsonPath("$").isNotEmpty()
                 .jsonPath("$.totalElements").isEqualTo(2)
-                .jsonPath("$.records[0].id").isEqualTo(2)
-                .jsonPath("$.records[0].name").isEqualTo("snusLover")
-                .jsonPath("$.records[0].description").isEqualTo("pipi-pupu")
-                .jsonPath("$.records[1].id").isEqualTo(1)
-                .jsonPath("$.records[1].name").isEqualTo("snusLover")
-                .jsonPath("$.records[1].description").isEqualTo("pipi-pupu");
+                .jsonPath("$.content[0].id").isEqualTo(2)
+                .jsonPath("$.content[0].name").isEqualTo("snusLover")
+                .jsonPath("$.content[0].description").isEqualTo("pipi-pupu")
+                .jsonPath("$.content[1].id").isEqualTo(1)
+                .jsonPath("$.content[1].name").isEqualTo("snusLover")
+                .jsonPath("$.content[1].description").isEqualTo("pipi-pupu");
     }
 
     @Test
     @SneakyThrows
-    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_delete_by_id.json")
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_delete_by_id.json", cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("datasets/controller/utilitystorage/utility_storage_delete__expected.json")
     void deleteByIdTest() {
         //Arrange
@@ -108,7 +108,7 @@ class UtilityStorageControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_update_by_id.json")
+    @DataSet(value = "datasets/controller/utilitystorage/utility_storage_update_by_id.json", cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("datasets/controller/utilitystorage/utility_storage_update_by_id__expected.json")
     void updateById() {
         int id = 1;

@@ -4,7 +4,7 @@ import dev.steadypim.thewhitehw.homework1.action.create.grade.CreateGradeAction;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeSearchCriteriaDTO;
-import dev.steadypim.thewhitehw.homework1.api.grade.dtos.SearchGradeResultDTO;
+import dev.steadypim.thewhitehw.homework1.api.PageDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.mapper.GradeMapper;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeService;
@@ -44,7 +44,7 @@ public class GradeController {
 
     @GetMapping("search")
     @Operation(description = "Поиск оценок по имени и/или описанию для конкретной записи")
-    public SearchGradeResultDTO searchGrades(
+    public PageDTO<GradeDTO> searchGrades(
             @ModelAttribute @Valid GradeSearchCriteriaDTO criteriaDTO,
             @PageableDefault(sort = "grade", direction = ASC) Pageable pageable) {
 

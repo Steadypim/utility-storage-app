@@ -28,7 +28,7 @@ class GradeControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet("datasets/controller/grade/grade_create.json")
+    @DataSet(value = "datasets/controller/grade/grade_create.json", cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("datasets/controller/grade/grade_create__expected.json")
     void testCreate() {
         //Arrange
@@ -66,11 +66,8 @@ class GradeControllerIT {
 
     @Test
     @SneakyThrows
-    @DataSet("datasets/controller/grade/grade_search.json")
+    @DataSet(value = "datasets/controller/grade/grade_search.json", cleanBefore = true, cleanAfter = true)
     void testSearch() {
-        //Arrange
-        int recordId = 1;
-
         //Act & Assert
         client.get().uri(
                         uriBuilder -> uriBuilder
@@ -84,15 +81,15 @@ class GradeControllerIT {
                 .expectBody()
                 .jsonPath("$").isNotEmpty()
                 .jsonPath("$.totalElements").isEqualTo(2)
-                .jsonPath("$.grades[0].comment").isEqualTo("wonderful")
-                .jsonPath("$.grades[0].id").isEqualTo(3)
-                .jsonPath("$.grades[1].comment").isEqualTo("AOAOAO")
-                .jsonPath("$.grades[1].id").isEqualTo(2);
+                .jsonPath("$.content[0].comment").isEqualTo("wonderful")
+                .jsonPath("$.content[0].id").isEqualTo(3)
+                .jsonPath("$.content[1].comment").isEqualTo("AOAOAO")
+                .jsonPath("$.content[1].id").isEqualTo(2);
     }
 
     @Test
     @SneakyThrows
-    @DataSet("datasets/controller/grade/grade_delete.json")
+    @DataSet(value = "datasets/controller/grade/grade_delete.json", cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("datasets/controller/grade/grade_delete__expected.json")
     void testDelete() {
         //Arrange

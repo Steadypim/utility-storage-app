@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,8 +30,6 @@ class DeleteUtilityStorageActionTest {
     void testDeleteWhenIdExistsThenDeleteRecord() {
         // Arrange
         int existingId = 1;
-        doNothing().when(gradeService).deleteAllByUtilityStorageId(existingId);
-        doNothing().when(utilityStorageService).deleteRecordById(existingId);
 
         // Act
         deleteUtilityStorageAction.delete(existingId);
