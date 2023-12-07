@@ -1,25 +1,26 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
+import dev.steadypim.thewhitehw.homework1.action.gelete.utilitystorage.DeleteUtilityStorageAction;
+import dev.steadypim.thewhitehw.homework1.api.PageDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityRecordDTO;
-import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
+import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UtilityStorageSearchCriteriaDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.mapper.UtilityStorageMapper;
-import dev.steadypim.thewhitehw.homework1.service.utilityStorage.UtilityStorageService;
-import dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageService;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.CreateUtilityRecordArgument;
+import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.SearchUtilityRecordArgument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @Tag(name = "Контроллер для работы с хранилищем полезностей")
 @RestController
@@ -29,6 +30,7 @@ public class UtilityStorageController {
 
     private final UtilityStorageService service;
     private final UtilityStorageMapper mapper;
+    private final DeleteUtilityStorageAction utilityStorageAction;
 
 
     @GetMapping("{id}")
@@ -38,14 +40,15 @@ public class UtilityStorageController {
         return mapper.toDto(service.findRecordById(id));
     }
 
-    @GetMapping("name")
-    @Operation(description = "Поиск записей по имени")
-    public Page<UtilityRecordDTO> findAllByName(@RequestParam("name") String name,
-                                                @PageableDefault(sort = "name") Pageable pageable) {
-        Page<UtilityStorage> records = service.findAllRecordsByName(name, pageable);
-        List<UtilityRecordDTO> dto = mapper.toDtoList(records.getContent());
+    @GetMapping("search")
+    @Operation(description = "Поиск записей по имени и/или описанию")
+    public PageDTO<UtilityRecordDTO> searchRecords(
+            @ModelAttribute UtilityStorageSearchCriteriaDTO criteriaDTO,
+            @PageableDefault(sort = "name", direction = ASC) Pageable pageable) {
 
-        return new PageImpl<>(dto, pageable, records.getTotalElements());
+        SearchUtilityRecordArgument searchUtilityRecordArgument = mapper.toSearchArgument(criteriaDTO, pageable);
+
+        return mapper.toSearchResultDTO(service.searchRecords(searchUtilityRecordArgument));
     }
 
     @PostMapping("create")
@@ -59,7 +62,7 @@ public class UtilityStorageController {
     @Operation(description = "Удаление записи по id")
     @ApiResponse(description = "Запись не найдена", responseCode = "404")
     public void deleteById(@PathVariable("id") int id) {
-        service.deleteRecordById(id);
+        utilityStorageAction.delete(id);
     }
 
     @PutMapping("{id}")

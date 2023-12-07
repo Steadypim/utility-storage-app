@@ -1,0 +1,15 @@
+{
+  "utility_storage": [
+    {
+      "id": 1,
+      "name": "updated name",
+      "description": "updated description"
+    }
+  ],
+  "utility_storage_links": [
+    {
+      "utility_storage_id": 1,
+      "link": "updated link"
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class CreateGradeActionArgument {
-    int recordId;
+    int utilityStorageId;
     String comment;
     int grade;
 }

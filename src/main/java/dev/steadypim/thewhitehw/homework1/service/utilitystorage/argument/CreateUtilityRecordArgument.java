@@ -1,14 +1,16 @@
-package dev.steadypim.thewhitehw.homework1.service.utilityStorage.argument;
+package dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUtilityRecordArgument {
+public class CreateUtilityRecordArgument {
     private String name;
     private String description;
-    private String link;
+    private List<String> links;
 }

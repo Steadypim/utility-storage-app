@@ -1,0 +1,23 @@
+{
+  "utility_storage": [
+    {
+      "id": 1,
+      "name": "name",
+      "description": "description"
+    }
+  ],
+  "utility_storage_links": [
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/1"
+    },
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/2"
+    },
+    {
+      "utility_storage_id": 1,
+      "link": "https://example.com/3"
+    }
+  ]
+}

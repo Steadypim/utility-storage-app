@@ -3,16 +3,21 @@ package dev.steadypim.thewhitehw.homework1.api.grade;
 import dev.steadypim.thewhitehw.homework1.action.create.grade.CreateGradeAction;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.CreateGradeDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeDTO;
+import dev.steadypim.thewhitehw.homework1.api.grade.dtos.GradeSearchCriteriaDTO;
+import dev.steadypim.thewhitehw.homework1.api.PageDTO;
 import dev.steadypim.thewhitehw.homework1.api.grade.mapper.GradeMapper;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeService;
+import dev.steadypim.thewhitehw.homework1.service.grade.argument.SearchGradeArgument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @Tag(name = "Контроллер для работы с оценками")
 @RestController
@@ -37,9 +42,14 @@ public class GradeController {
         gradeService.delete(id);
     }
 
-    @GetMapping("{recordId}")
-    @Operation(description = "Получение всех оценок записи по ее id")
-    public List<GradeDTO> findAllByRecordId(@PathVariable("recordId") int recordId){
-        return gradeMapper.toDtoList(gradeService.findAllByRecordId(recordId));
+    @GetMapping("search")
+    @Operation(description = "Поиск оценок по имени и/или описанию для конкретной записи")
+    public PageDTO<GradeDTO> searchGrades(
+            @ModelAttribute @Valid GradeSearchCriteriaDTO criteriaDTO,
+            @PageableDefault(sort = "grade", direction = ASC) Pageable pageable) {
+
+        SearchGradeArgument searchGradeArgument = gradeMapper.toSearchArgument(criteriaDTO, pageable);
+
+        return gradeMapper.toSearchResultDTO(gradeService.searchGrades(searchGradeArgument));
     }
 }
