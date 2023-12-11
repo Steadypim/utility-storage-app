@@ -22,6 +22,7 @@ public interface GradeMapper {
     GradeDTO toDto(Grade grade);
 
     SearchGradeArgument toSearchArgument(GradeSearchCriteriaDTO argument, Pageable pageable);
+
     @Mapping(source = "resultPage.content", target = "content")
     @Mapping(source = "resultPage.totalElements", target = "totalElements")
     PageDTO<GradeDTO> toSearchResultDTO(Page<Grade> resultPage);
