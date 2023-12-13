@@ -32,7 +32,6 @@ public class SecurityAuditAspect {
     public void afterCreatingGrade(Object grade) {
         if (grade instanceof Grade gradeInstance) {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            assert attributes != null;
             HttpServletRequest request = attributes.getRequest();
 
             String ipAddress = obtainIpAddress(request);
