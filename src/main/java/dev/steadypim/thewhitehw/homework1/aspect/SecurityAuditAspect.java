@@ -32,14 +32,20 @@ public class SecurityAuditAspect {
     public void afterCreatingGrade(Object grade) {
         if (grade instanceof Grade gradeInstance) {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            HttpServletRequest request = attributes.getRequest();
+            String info;
+            if (attributes != null) {
+                HttpServletRequest request = attributes.getRequest();
+                String ipAddress = obtainIpAddress(request);
+                String userAgent = obtainUserAgent(attributes);
+                info = "IP: " + ipAddress + "; User-Agent: " + userAgent;
 
-            String ipAddress = obtainIpAddress(request);
-            String userAgent = obtainUserAgent(attributes);
-
+            }
+            else {
+                info = "Не удалось получить";
+            }
             CreateSecurityAuditArgument auditArgument = CreateSecurityAuditArgument.builder()
                     .gradeId(gradeInstance.getId())
-                    .info("IP: " + ipAddress + "; User-Agent: " + userAgent)
+                    .info(info)
                     .createdAt(now())
                     .build();
 
