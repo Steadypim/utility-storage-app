@@ -1,10 +1,11 @@
 package dev.steadypim.thewhitehw.homework1.service.utilitystorage;
 
 import com.querydsl.core.BooleanBuilder;
+import dev.steadypim.thewhitehw.homework1.annotation.MethodForStatistics;
 import dev.steadypim.thewhitehw.homework1.entity.QUtilityStorage;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilitystorage.UtilityStorageRepository;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.CreateUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.SearchUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.UpdateUtilityRecordArgument;
@@ -45,6 +46,7 @@ public class UtilityStorageService {
     }
 
     @Transactional
+    @MethodForStatistics
     public UtilityStorage createRecord(CreateUtilityRecordArgument argument) {
         UtilityStorage record = UtilityStorage.builder()
                 .name(argument.getName())
@@ -55,6 +57,7 @@ public class UtilityStorageService {
     }
 
     @Transactional
+    @MethodForStatistics
     public void deleteRecordById(int id) {
         repository.delete(repository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Запись не найдена")));
@@ -68,5 +71,50 @@ public class UtilityStorageService {
         existingRecord.setDescription(dto.getDescription());
         existingRecord.setLinks(dto.getLinks());
         repository.save(existingRecord);
+    }
+
+    @Transactional(readOnly = true)
+    public Long getTotalRecords(){
+        return repository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public Long calculateNumberOfRecordsWithMaxAverageGrade(){
+        return repository.calculateNumberOfRecordsWithMaxAverageGrade();
+    }
+
+    @Transactional(readOnly = true)
+    public Double calculatePercentageOfRecordsWithMaxAverageGrade(){
+        return repository.calculatePercentageOfRecordsWithMaxAverageGrade();
+    }
+
+    @Transactional(readOnly = true)
+    public Long calculateNumberOfRecordsWithAverageGradeFourOrHigher(){
+        return repository.calculateNumberOfRecordsWithAverageGradeFourOrHigher();
+    }
+
+    @Transactional(readOnly = true)
+    public Double calculatePercentageOfRecordsWithAverageGradeFourOrHigher(){
+        return repository.calculatePercentageOfRecordsWithAverageGradeFourOrHigher();
+    }
+
+    @Transactional(readOnly = true)
+    public Long calculateRecordsWithoutGradesBelowFour(){
+        return repository.calculateRecordsWithoutGradesBelowFour();
+    }
+
+    @Transactional(readOnly = true)
+    public Double calculatePercentageRecordsWithoutGradesBelowFour(){
+        return repository.calculatePercentageRecordsWithoutGradesBelowFour();
+    }
+
+    @Transactional(readOnly = true)
+    public Double calculateAverageGradeOfEntireStorage(){
+        return repository.calculateAverageGradeOfEntireStorage();
+    }
+
+    @Transactional(readOnly = true)
+    public Long calculateNumberOfRecordsWithoutGrades(){
+        return repository.calculateNumberOfRecordsWithoutGrades();
     }
 }

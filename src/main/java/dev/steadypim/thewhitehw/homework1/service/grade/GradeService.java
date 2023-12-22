@@ -16,4 +16,6 @@ public interface GradeService {
     void deleteAllByUtilityStorageId(int id);
 
     Page<Grade> searchGrades(SearchGradeArgument argument);
+
+    Long getTotalGrades();
 }

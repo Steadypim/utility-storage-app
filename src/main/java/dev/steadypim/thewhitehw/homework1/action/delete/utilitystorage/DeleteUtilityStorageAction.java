@@ -1,4 +1,4 @@
-package dev.steadypim.thewhitehw.homework1.action.gelete.utilitystorage;
+package dev.steadypim.thewhitehw.homework1.action.delete.utilitystorage;
 
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeService;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageService;
