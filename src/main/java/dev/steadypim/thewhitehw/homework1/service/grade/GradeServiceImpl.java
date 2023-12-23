@@ -65,4 +65,11 @@ public class GradeServiceImpl implements GradeService {
     public Long getTotalGrades() {
         return repository.count();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double countAverageGradeOfEntireStorage() {
+        return repository.countAverageGradeOfEntireStorage();
+    }
+
 }

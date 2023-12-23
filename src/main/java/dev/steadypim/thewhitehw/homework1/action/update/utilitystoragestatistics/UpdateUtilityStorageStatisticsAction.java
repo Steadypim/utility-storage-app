@@ -17,28 +17,53 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class UpdateUtilityStorageStatisticsAction {
+
     UtilityStorageStatisticsService utilityStorageStatisticsService;
     UtilityStorageService utilityStorageService;
     GradeService gradeService;
+
 
     @EventListener
     @Async("statisticsExecutor")
     public void onStatisticsEvent(StatisticsEvent event) {
 
+
+
         UpdateUtilityStorageStatisticsArgument argument = UpdateUtilityStorageStatisticsArgument.builder()
-                .totalRecords(utilityStorageService.getTotalRecords())
-                .totalGrades(gradeService.getTotalGrades())
-                .averageGradeOfEntireStorage(utilityStorageService.calculateAverageGradeOfEntireStorage())
-                .numberOfRecordsWithMaxAverageGrade(utilityStorageService.calculateNumberOfRecordsWithMaxAverageGrade())
-                .percentageOfRecordsWithMaxAverageGrade(utilityStorageService.calculatePercentageOfRecordsWithMaxAverageGrade())
-                .numberOfRecordsWithoutGradesBelowFour(utilityStorageService.calculateRecordsWithoutGradesBelowFour())
-                .percentageOfRecordsWithoutGradesBelowFour(utilityStorageService.calculatePercentageRecordsWithoutGradesBelowFour())
-                .numberOfRecordsWithAverageGradeFourOrHigher(utilityStorageService.calculateNumberOfRecordsWithAverageGradeFourOrHigher())
-                .percentageOfRecordsWithAverageGradeFourOrHigher(utilityStorageService.calculatePercentageOfRecordsWithAverageGradeFourOrHigher())
-                .numberOfRecordsWithoutGrades(utilityStorageService.calculateNumberOfRecordsWithoutGrades())
+                .totalRecords(
+                        utilityStorageService.getTotalRecords()
+                )
+                .totalGrades(
+                        gradeService.getTotalGrades()
+                )
+                .averageGradeOfEntireStorage(
+                        gradeService.countAverageGradeOfEntireStorage()
+                )
+                .numberOfRecordsWithMaxAverageGrade(
+                        utilityStorageService.countRecordsWithAverageGradeEqualsFive()
+                )
+                .percentageOfRecordsWithMaxAverageGrade(
+                        utilityStorageService.percentageOfRecordsWithAverageGradeEqualsFive()
+                )
+                .numberOfRecordsWithoutGradesBelowFour(
+                        utilityStorageService.countRecordsWithoutGradesBelowFour()
+                )
+                .percentageOfRecordsWithoutGradesBelowFour(
+                        utilityStorageService.percentageRecordsWithoutGradesBelowFour()
+                )
+                .numberOfRecordsWithAverageGradeFourOrHigher(
+                        utilityStorageService.countRecordsWithAverageGradeEqualsFourOrHigher()
+                )
+                .percentageOfRecordsWithAverageGradeFourOrHigher(
+                        utilityStorageService.percentageOfRecordsWithAverageGradeFourOrHigher()
+                )
+                .numberOfRecordsWithoutGrades(
+                        utilityStorageService.countRecordsWithoutGrades()
+                )
                 .build();
 
         utilityStorageStatisticsService.updateStatistics(argument);
+
     }
 
 }

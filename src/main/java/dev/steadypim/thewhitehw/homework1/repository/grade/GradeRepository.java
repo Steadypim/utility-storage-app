@@ -12,5 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Integer>, QuerydslPredicateExecutor<Grade> {
     void deleteAllByUtilityStorageId(int id);
+
+    @Query("SELECT AVG(g.grade) FROM Grade g")
+    Double countAverageGradeOfEntireStorage();
 }
 

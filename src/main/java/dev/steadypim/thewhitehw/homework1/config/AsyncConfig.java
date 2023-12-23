@@ -17,7 +17,7 @@ public class AsyncConfig {
 
         executor.setCorePoolSize(10);
         executor.setMaxPoolSize(100);
-        executor.setThreadNamePrefix("statisticsExecutor-");
+        executor.setThreadNamePrefix("statsExecutor-");
         executor.initialize();
 
         return executor;

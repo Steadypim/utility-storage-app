@@ -79,42 +79,61 @@ public class UtilityStorageService {
     }
 
     @Transactional(readOnly = true)
-    public Long calculateNumberOfRecordsWithMaxAverageGrade(){
-        return repository.calculateNumberOfRecordsWithMaxAverageGrade();
+    public Long countRecordsWithAverageGradeEqualsFive(){
+        return repository.countRecordsWithAverageGradeEqualsFive();
     }
 
     @Transactional(readOnly = true)
-    public Double calculatePercentageOfRecordsWithMaxAverageGrade(){
-        return repository.calculatePercentageOfRecordsWithMaxAverageGrade();
+    public Double percentageOfRecordsWithAverageGradeEqualsFive(){
+        long totalRecords = repository.count();
+
+        long recordsWithAverageGradeEqualsFive = repository.countRecordsWithAverageGradeEqualsFive();
+
+        if (totalRecords > 0) {
+            return ((double) recordsWithAverageGradeEqualsFive / totalRecords) * 100;
+        } else {
+            return 0.0;
+        }
     }
 
     @Transactional(readOnly = true)
-    public Long calculateNumberOfRecordsWithAverageGradeFourOrHigher(){
-        return repository.calculateNumberOfRecordsWithAverageGradeFourOrHigher();
+    public Long countRecordsWithAverageGradeEqualsFourOrHigher(){
+        return repository.countRecordsWithAverageGradeEqualsFourOrHigher();
     }
 
     @Transactional(readOnly = true)
-    public Double calculatePercentageOfRecordsWithAverageGradeFourOrHigher(){
-        return repository.calculatePercentageOfRecordsWithAverageGradeFourOrHigher();
+    public Double percentageOfRecordsWithAverageGradeFourOrHigher(){
+        long totalRecords = repository.count();
+
+        long recordsWithAverageGradeFourOrHigher = repository.countRecordsWithAverageGradeEqualsFourOrHigher();
+
+        if (totalRecords > 0) {
+            return ((double) recordsWithAverageGradeFourOrHigher / totalRecords) * 100;
+        } else {
+            return 0.0;
+        }
     }
 
     @Transactional(readOnly = true)
-    public Long calculateRecordsWithoutGradesBelowFour(){
-        return repository.calculateRecordsWithoutGradesBelowFour();
+    public Long countRecordsWithoutGradesBelowFour(){
+        return repository.countRecordsWithoutGradesBelowFour();
     }
 
     @Transactional(readOnly = true)
-    public Double calculatePercentageRecordsWithoutGradesBelowFour(){
-        return repository.calculatePercentageRecordsWithoutGradesBelowFour();
+    public Double percentageRecordsWithoutGradesBelowFour(){
+        long totalRecords = repository.count();
+
+        long recordsWithoutGradesBelowFour = repository.countRecordsWithoutGradesBelowFour();
+
+        if (totalRecords > 0) {
+            return ((double) recordsWithoutGradesBelowFour / totalRecords) * 100;
+        } else {
+            return 0.0;
+        }
     }
 
     @Transactional(readOnly = true)
-    public Double calculateAverageGradeOfEntireStorage(){
-        return repository.calculateAverageGradeOfEntireStorage();
-    }
-
-    @Transactional(readOnly = true)
-    public Long calculateNumberOfRecordsWithoutGrades(){
-        return repository.calculateNumberOfRecordsWithoutGrades();
+    public Long countRecordsWithoutGrades(){
+        return repository.countRecordsWithoutGrades();
     }
 }

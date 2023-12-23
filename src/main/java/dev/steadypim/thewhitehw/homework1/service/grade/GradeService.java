@@ -18,4 +18,6 @@ public interface GradeService {
     Page<Grade> searchGrades(SearchGradeArgument argument);
 
     Long getTotalGrades();
+
+    Double countAverageGradeOfEntireStorage();
 }

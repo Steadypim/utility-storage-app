@@ -15,6 +15,6 @@ public class MethodForStatisticsAspect {
 
     @After("@annotation(dev.steadypim.thewhitehw.homework1.annotation.MethodForStatistics)")
     public void afterMethodForStatisticsExecution(){
-        eventPublisher.publishEvent(new StatisticsEvent());
+        eventPublisher.publishEvent(new StatisticsEvent("Update UtilityStorage statistics"));
     }
 }
