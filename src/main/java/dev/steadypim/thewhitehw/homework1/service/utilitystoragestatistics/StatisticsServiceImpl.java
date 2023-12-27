@@ -1,8 +1,8 @@
 package dev.steadypim.thewhitehw.homework1.service.utilitystoragestatistics;
 
-import dev.steadypim.thewhitehw.homework1.entity.UtilityStorageStatistics;
-import dev.steadypim.thewhitehw.homework1.repository.utilitystoragestatistics.UtilityStorageStatisticsRepository;
-import dev.steadypim.thewhitehw.homework1.service.utilitystoragestatistics.argument.UpdateUtilityStorageStatisticsArgument;
+import dev.steadypim.thewhitehw.homework1.entity.Statistics;
+import dev.steadypim.thewhitehw.homework1.repository.utilitystoragestatistics.StatisticsRepository;
+import dev.steadypim.thewhitehw.homework1.service.utilitystoragestatistics.argument.UpdateStatisticsArgument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class UtilityStorageStatisticsServiceImpl implements UtilityStorageStatisticsService{
+public class StatisticsServiceImpl implements StatisticsService {
 
-    private final UtilityStorageStatisticsRepository repository;
+    private final StatisticsRepository repository;
     @Override
     @Transactional
-    public void updateStatistics(UpdateUtilityStorageStatisticsArgument argument) {
-        UtilityStorageStatistics statistics = repository.findFirstByOrderByIdAsc();
+    public void updateStatistics(UpdateStatisticsArgument argument) {
+        Statistics statistics = repository.findFirstByOrderByIdAsc();
 
         if(statistics == null){
-            statistics = new UtilityStorageStatistics();
+            statistics = new Statistics();
         }
 
         statistics.setTotalRecords(argument.totalRecords());
@@ -40,11 +40,11 @@ public class UtilityStorageStatisticsServiceImpl implements UtilityStorageStatis
 
     @Override
     @Transactional(readOnly = true)
-    public UtilityStorageStatistics getStatistics() {
-        UtilityStorageStatistics statistics = repository.findFirstByOrderByIdAsc();
+    public Statistics getStatistics() {
+        Statistics statistics = repository.findFirstByOrderByIdAsc();
 
         if (statistics == null){
-            statistics = new UtilityStorageStatistics();
+            statistics = new Statistics();
         }
 
         return statistics;

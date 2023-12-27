@@ -11,24 +11,24 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UtilityStorageRepository extends JpaRepository<UtilityStorage, Integer>, QuerydslPredicateExecutor<UtilityStorage> {
-    @Query("SELECT COUNT(DISTINCT gs) " +
+    @Query("SELECT COUNT(*) " +
             "FROM UtilityStorage gs " +
             "WHERE 5 = (SELECT AVG(g.grade) FROM Grade g WHERE g.utilityStorage = gs)")
     Long countRecordsWithAverageGradeEqualsFive();
 
 
-    @Query("SELECT COUNT(DISTINCT gs) " +
+    @Query("SELECT COUNT(*) " +
             "FROM UtilityStorage gs " +
             "WHERE 4 <= (SELECT AVG(g.grade) FROM Grade g WHERE g.utilityStorage = gs)")
     Long countRecordsWithAverageGradeEqualsFourOrHigher();
 
-    @Query("SELECT COUNT(DISTINCT gs) " +
+    @Query("SELECT COUNT(*) " +
             "FROM UtilityStorage gs " +
             "WHERE NOT EXISTS (" +
             "    SELECT g FROM Grade g WHERE g.utilityStorage = gs AND g.grade < 4" +
             ")")
     Long countRecordsWithoutGradesBelowFour();
 
-    @Query("SELECT COUNT(DISTINCT gs) FROM UtilityStorage gs WHERE NOT EXISTS (SELECT g FROM Grade g WHERE g.utilityStorage = gs)")
+    @Query("SELECT COUNT(*) FROM UtilityStorage gs WHERE NOT EXISTS (SELECT g FROM Grade g WHERE g.utilityStorage = gs)")
     Long countRecordsWithoutGrades();
 }

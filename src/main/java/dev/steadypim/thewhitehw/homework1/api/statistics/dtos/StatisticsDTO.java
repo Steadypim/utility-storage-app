@@ -1,9 +1,6 @@
-package dev.steadypim.thewhitehw.homework1.service.utilitystoragestatistics.argument;
+package dev.steadypim.thewhitehw.homework1.api.statistics.dtos;
 
-import lombok.Builder;
-
-@Builder
-public record UpdateUtilityStorageStatisticsArgument(
+public record StatisticsDTO(
         Long totalRecords,
         Long totalGrades,
         Double averageGradeOfEntireStorage,
@@ -15,5 +12,4 @@ public record UpdateUtilityStorageStatisticsArgument(
         Double percentageOfRecordsWithoutGradesBelowFour,
         Long numberOfRecordsWithoutGrades
 ) {
-
 }

@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
-public class UtilityStorageStatistics extends BaseEntity {
+public class Statistics extends BaseEntity {
     Long totalRecords;
     Long totalGrades;
     Double averageGradeOfEntireStorage;
