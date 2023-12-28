@@ -26,9 +26,6 @@ public class UpdateStatisticsAction {
     @EventListener
     @Async("statisticsExecutor")
     public void onStatisticsEvent(StatisticsEvent event) {
-
-
-
         UpdateStatisticsArgument argument = UpdateStatisticsArgument.builder()
                 .totalRecords(utilityStorageService.getTotalRecords())
                 .totalGrades(gradeService.getTotalGrades())
