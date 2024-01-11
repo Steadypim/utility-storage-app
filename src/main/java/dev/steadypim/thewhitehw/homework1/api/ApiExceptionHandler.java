@@ -38,8 +38,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errorMessages = new ArrayList<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error ->
-                errorMessages.add(error.getDefaultMessage())
-        );
+                                                               errorMessages.add(error.getDefaultMessage())
+                                                      );
 
         return ResponseEntity.badRequest().body(ErrorDTO.of(errorMessages));
     }

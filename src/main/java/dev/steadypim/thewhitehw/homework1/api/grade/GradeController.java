@@ -30,7 +30,7 @@ public class GradeController {
 
     @PostMapping("create")
     @Operation(description = "Создание оценки")
-    public GradeDTO create(@RequestBody @Valid CreateGradeDTO dto){
+    public GradeDTO create(@RequestBody @Valid CreateGradeDTO dto) {
         Grade grade = gradeAction.create(gradeMapper.toCreateActionArgument(dto));
 
         return gradeMapper.toDto(grade);
@@ -38,7 +38,7 @@ public class GradeController {
 
     @DeleteMapping("{id}")
     @Operation(description = "Удаление оценки по id")
-    public void delete(@PathVariable("id") int id){
+    public void delete(@PathVariable("id") int id) {
         gradeService.delete(id);
     }
 

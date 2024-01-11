@@ -1,0 +1,17 @@
+{
+  "statistics": [
+    {
+      "id": 1,
+      "total_records": 4,
+      "total_grades": 13,
+      "average_grade_of_entire_storage": 4.615384615384615,
+      "number_of_records_with_max_average_grade": 1,
+      "percentage_of_records_with_max_average_grade": 25.0,
+      "number_of_records_with_average_grade_four_or_higher": 3,
+      "percentage_of_records_with_average_grade_four_or_higher": 75.0,
+      "number_of_records_without_grades_below_four": 3,
+      "percentage_of_records_without_grades_below_four": 75.0,
+      "number_of_records_without_grades": 1
+    }
+  ]
+}

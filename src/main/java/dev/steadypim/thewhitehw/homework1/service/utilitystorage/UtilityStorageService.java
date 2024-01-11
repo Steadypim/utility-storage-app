@@ -1,10 +1,11 @@
 package dev.steadypim.thewhitehw.homework1.service.utilitystorage;
 
 import com.querydsl.core.BooleanBuilder;
+import dev.steadypim.thewhitehw.homework1.annotation.MethodForStatistics;
 import dev.steadypim.thewhitehw.homework1.entity.QUtilityStorage;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilitystorage.UtilityStorageRepository;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.CreateUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.SearchUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.UpdateUtilityRecordArgument;
@@ -24,7 +25,7 @@ public class UtilityStorageService {
     @Transactional(readOnly = true)
     public UtilityStorage findRecordById(int id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
+                         .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
     }
 
     @Transactional(readOnly = true)
@@ -45,19 +46,21 @@ public class UtilityStorageService {
     }
 
     @Transactional
+    @MethodForStatistics
     public UtilityStorage createRecord(CreateUtilityRecordArgument argument) {
         UtilityStorage record = UtilityStorage.builder()
-                .name(argument.getName())
-                .links(argument.getLinks())
-                .description(argument.getDescription())
-                .build();
+                                              .name(argument.getName())
+                                              .links(argument.getLinks())
+                                              .description(argument.getDescription())
+                                              .build();
         return repository.save(record);
     }
 
     @Transactional
+    @MethodForStatistics
     public void deleteRecordById(int id) {
         repository.delete(repository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Запись не найдена")));
+                                    orElseThrow(() -> new EntityNotFoundException("Запись не найдена")));
     }
 
     @Transactional
@@ -68,5 +71,69 @@ public class UtilityStorageService {
         existingRecord.setDescription(dto.getDescription());
         existingRecord.setLinks(dto.getLinks());
         repository.save(existingRecord);
+    }
+
+    @Transactional(readOnly = true)
+    public Long getTotalRecords() {
+        return repository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public Long countRecordsWithAverageGradeEqualsFive() {
+        return repository.countRecordsWithAverageGradeEqualsFive();
+    }
+
+    @Transactional(readOnly = true)
+    public Double percentageOfRecordsWithAverageGradeEqualsFive() {
+        long totalRecords = repository.count();
+
+        long recordsWithAverageGradeEqualsFive = repository.countRecordsWithAverageGradeEqualsFive();
+
+        if (totalRecords > 0) {
+            return ((double) recordsWithAverageGradeEqualsFive / totalRecords) * 100;
+        } else {
+            return 0.0;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Long countRecordsWithAverageGradeEqualsFourOrHigher() {
+        return repository.countRecordsWithAverageGradeEqualsFourOrHigher();
+    }
+
+    @Transactional(readOnly = true)
+    public Double percentageOfRecordsWithAverageGradeFourOrHigher() {
+        long totalRecords = repository.count();
+
+        long recordsWithAverageGradeFourOrHigher = repository.countRecordsWithAverageGradeEqualsFourOrHigher();
+
+        if (totalRecords > 0) {
+            return ((double) recordsWithAverageGradeFourOrHigher / totalRecords) * 100;
+        } else {
+            return 0.0;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Long countRecordsWithoutGradesBelowFour() {
+        return repository.countRecordsWithoutGradesBelowFour();
+    }
+
+    @Transactional(readOnly = true)
+    public Double percentageRecordsWithoutGradesBelowFour() {
+        long totalRecords = repository.count();
+
+        long recordsWithoutGradesBelowFour = repository.countRecordsWithoutGradesBelowFour();
+
+        if (totalRecords > 0) {
+            return ((double) recordsWithoutGradesBelowFour / totalRecords) * 100;
+        } else {
+            return 0.0;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Long countRecordsWithoutGrades() {
+        return repository.countRecordsWithoutGrades();
     }
 }

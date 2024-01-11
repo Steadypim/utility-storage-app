@@ -20,10 +20,10 @@ public class CreateGradeAction {
         UtilityStorage record = storageService.findRecordById(argument.getUtilityStorageId());
 
         CreateGradeArgument createGradeArgument = CreateGradeArgument.builder()
-                .comment(argument.getComment())
-                .utilityStorage(record)
-                .grade(argument.getGrade())
-                .build();
+                                                                     .comment(argument.getComment())
+                                                                     .utilityStorage(record)
+                                                                     .grade(argument.getGrade())
+                                                                     .build();
 
         return gradeService.create(createGradeArgument);
     }

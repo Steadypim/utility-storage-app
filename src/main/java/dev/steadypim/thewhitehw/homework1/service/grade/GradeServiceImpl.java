@@ -1,6 +1,7 @@
 package dev.steadypim.thewhitehw.homework1.service.grade;
 
 import com.querydsl.core.BooleanBuilder;
+import dev.steadypim.thewhitehw.homework1.annotation.MethodForStatistics;
 import dev.steadypim.thewhitehw.homework1.entity.Grade;
 import dev.steadypim.thewhitehw.homework1.entity.QGrade;
 import dev.steadypim.thewhitehw.homework1.repository.grade.GradeRepository;
@@ -19,23 +20,26 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     @Transactional
+    @MethodForStatistics
     public Grade create(CreateGradeArgument argument) {
         Grade grade = Grade.builder()
-                .utilityStorage(argument.getUtilityStorage())
-                .comment(argument.getComment())
-                .grade(argument.getGrade())
-                .build();
+                           .utilityStorage(argument.getUtilityStorage())
+                           .comment(argument.getComment())
+                           .grade(argument.getGrade())
+                           .build();
         return repository.save(grade);
     }
 
     @Override
     @Transactional
+    @MethodForStatistics
     public void delete(int id) {
         repository.deleteById(id);
     }
 
     @Override
     @Transactional
+    @MethodForStatistics
     public void deleteAllByUtilityStorageId(int id) {
         repository.deleteAllByUtilityStorageId(id);
     }
@@ -55,4 +59,17 @@ public class GradeServiceImpl implements GradeService {
 
         return repository.findAll(predicate, argument.getPageable());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getTotalGrades() {
+        return repository.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double countAverageGradeOfEntireStorage() {
+        return repository.countAverageGradeOfEntireStorage();
+    }
+
 }

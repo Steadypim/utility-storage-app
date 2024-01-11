@@ -17,6 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = AbstractTestcontainers.class)
 @AutoConfigureWebTestClient
 @FieldDefaults(level = PRIVATE)
@@ -33,19 +34,19 @@ class GradeControllerIT {
     void testCreate() {
         //Arrange
         CreateGradeDTO dtoToCreate = CreateGradeDTO.builder()
-                .utilityStorageId(1)
-                .comment("kaif")
-                .grade(4)
-                .build();
+                                                   .utilityStorageId(1)
+                                                   .comment("kaif")
+                                                   .grade(4)
+                                                   .build();
 
         //Act & Assert
         client.post()
-                .uri("/grade/create")
-                .contentType(APPLICATION_JSON)
-                .bodyValue(dtoToCreate)
-                .exchange()
-                .expectStatus()
-                .isOk();
+              .uri("/grade/create")
+              .contentType(APPLICATION_JSON)
+              .bodyValue(dtoToCreate)
+              .exchange()
+              .expectStatus()
+              .isOk();
     }
 
     @Test
@@ -55,12 +56,12 @@ class GradeControllerIT {
 
         //Act & Assert
         client.post().uri("/grade/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(dto)
-                .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody()
-                .jsonPath("$.errorMessages").isNotEmpty();
+              .contentType(MediaType.APPLICATION_JSON)
+              .bodyValue(dto)
+              .exchange()
+              .expectStatus().isBadRequest()
+              .expectBody()
+              .jsonPath("$.errorMessages").isNotEmpty();
     }
 
 
@@ -70,21 +71,21 @@ class GradeControllerIT {
     void testSearch() {
         //Act & Assert
         client.get().uri(
-                        uriBuilder -> uriBuilder
-                                .path("/grade/search")
-                                .queryParam("recordId", 1)
-                                .queryParam("grade", 3)
-                                .queryParam("sort", "comment,desc")
-                                .build())
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$").isNotEmpty()
-                .jsonPath("$.totalElements").isEqualTo(2)
-                .jsonPath("$.content[0].comment").isEqualTo("wonderful")
-                .jsonPath("$.content[0].id").isEqualTo(3)
-                .jsonPath("$.content[1].comment").isEqualTo("AOAOAO")
-                .jsonPath("$.content[1].id").isEqualTo(2);
+                      uriBuilder -> uriBuilder
+                              .path("/grade/search")
+                              .queryParam("recordId", 1)
+                              .queryParam("grade", 3)
+                              .queryParam("sort", "comment,desc")
+                              .build())
+              .exchange()
+              .expectStatus().isOk()
+              .expectBody()
+              .jsonPath("$").isNotEmpty()
+              .jsonPath("$.totalElements").isEqualTo(2)
+              .jsonPath("$.content[0].comment").isEqualTo("wonderful")
+              .jsonPath("$.content[0].id").isEqualTo(3)
+              .jsonPath("$.content[1].comment").isEqualTo("AOAOAO")
+              .jsonPath("$.content[1].id").isEqualTo(2);
     }
 
     @Test
@@ -97,7 +98,7 @@ class GradeControllerIT {
 
         //Act & Assert
         client.delete().uri("/grade/{id}", id)
-                .exchange()
-                .expectStatus().isOk();
+              .exchange()
+              .expectStatus().isOk();
     }
 }

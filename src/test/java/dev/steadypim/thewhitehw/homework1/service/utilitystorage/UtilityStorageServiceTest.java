@@ -3,7 +3,7 @@ package dev.steadypim.thewhitehw.homework1.service.utilitystorage;
 import com.querydsl.core.BooleanBuilder;
 import dev.steadypim.thewhitehw.homework1.entity.UtilityStorage;
 import dev.steadypim.thewhitehw.homework1.exception.EntityNotFoundException;
-import dev.steadypim.thewhitehw.homework1.repository.utilityStorage.UtilityStorageRepository;
+import dev.steadypim.thewhitehw.homework1.repository.utilitystorage.UtilityStorageRepository;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.CreateUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.SearchUtilityRecordArgument;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.argument.UpdateUtilityRecordArgument;
@@ -66,10 +66,10 @@ class UtilityStorageServiceTest {
         when(repository.findAll(any(BooleanBuilder.class), eq(pageable))).thenReturn(expectedPage);
 
         SearchUtilityRecordArgument argument = SearchUtilityRecordArgument.builder()
-                .name("test")
-                .description("testDescription")
-                .pageable(pageable)
-                .build();
+                                                                          .name("test")
+                                                                          .description("testDescription")
+                                                                          .pageable(pageable)
+                                                                          .build();
 
         // Act
         Page<UtilityStorage> actualPage = service.searchRecords(argument);
@@ -86,10 +86,10 @@ class UtilityStorageServiceTest {
         when(repository.findAll(any(BooleanBuilder.class), eq(pageable))).thenReturn(expectedPage);
 
         SearchUtilityRecordArgument argument = SearchUtilityRecordArgument.builder()
-                .name("test")
-                .description("testDescription")
-                .pageable(pageable)
-                .build();
+                                                                          .name("test")
+                                                                          .description("testDescription")
+                                                                          .pageable(pageable)
+                                                                          .build();
 
         // Act
         Page<UtilityStorage> actualPage = service.searchRecords(argument);

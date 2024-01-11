@@ -35,10 +35,10 @@ class CreateGradeActionTest {
     void testCreateWhenRecordExistsThenReturnGrade() {
         // Arrange
         CreateGradeActionArgument argument = CreateGradeActionArgument.builder()
-                .utilityStorageId(0)
-                .comment("Excellent")
-                .grade(5)
-                .build();
+                                                                      .utilityStorageId(0)
+                                                                      .comment("Excellent")
+                                                                      .grade(5)
+                                                                      .build();
         mockRecord = new UtilityStorage();
         when(storageService.findRecordById(argument.getUtilityStorageId())).thenReturn(mockRecord);
         Grade expectedGrade = new Grade();

@@ -13,6 +13,7 @@ public abstract class AbstractTestcontainers {
     @Container
     protected static final PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:latest");
+
     @Bean
     @ServiceConnection
     public PostgreSQLContainer<?> registerDriverProperties(DynamicPropertyRegistry registry) {

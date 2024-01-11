@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.api.utilitystorage;
 
-import dev.steadypim.thewhitehw.homework1.action.gelete.utilitystorage.DeleteUtilityStorageAction;
+import dev.steadypim.thewhitehw.homework1.action.delete.utilitystorage.DeleteUtilityStorageAction;
 import dev.steadypim.thewhitehw.homework1.api.PageDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.CreateUtilityRecordDTO;
 import dev.steadypim.thewhitehw.homework1.api.utilitystorage.dtos.UpdateUtilityRecordDTO;
