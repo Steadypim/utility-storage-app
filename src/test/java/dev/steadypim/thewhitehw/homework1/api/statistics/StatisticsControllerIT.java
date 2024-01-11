@@ -30,7 +30,7 @@ class StatisticsControllerIT {
     @SneakyThrows
     @DataSet(value = "datasets/controller/statistics/statistics_get.json", cleanBefore = true, cleanAfter = true)
     void getStatisticsTest() {
-        //Arrange & Act
+        //Arrange
         StatisticsDTO statisticsDto = client.get()
                                             .uri("/statistics")
                                             .exchange()
