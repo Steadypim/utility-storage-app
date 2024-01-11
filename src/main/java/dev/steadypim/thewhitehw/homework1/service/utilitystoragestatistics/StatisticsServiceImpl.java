@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * Сервис статистики хранилища
  */
@@ -15,14 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final StatisticsRepository repository;
+
     @Override
     @Transactional
     public void updateStatistics(UpdateStatisticsArgument argument) {
-        Statistics statistics = repository.findFirstByOrderByIdAsc();
-
-        if(statistics == null){
-            statistics = new Statistics();
-        }
+        Statistics statistics = Optional.ofNullable(repository.findFirstByOrderByIdAsc())
+                                        .orElseGet(Statistics::new);
 
         statistics.setTotalRecords(argument.totalRecords());
         statistics.setTotalGrades(argument.totalGrades());
@@ -41,11 +41,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     @Transactional(readOnly = true)
     public Statistics getStatistics() {
-        Statistics statistics = repository.findFirstByOrderByIdAsc();
-
-        if (statistics == null){
-            statistics = new Statistics();
-        }
+        Statistics statistics = Optional.ofNullable(repository.findFirstByOrderByIdAsc())
+                                        .orElseGet(Statistics::new);
 
         return statistics;
     }

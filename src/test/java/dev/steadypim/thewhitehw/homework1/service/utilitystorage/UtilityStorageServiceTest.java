@@ -66,10 +66,10 @@ class UtilityStorageServiceTest {
         when(repository.findAll(any(BooleanBuilder.class), eq(pageable))).thenReturn(expectedPage);
 
         SearchUtilityRecordArgument argument = SearchUtilityRecordArgument.builder()
-                .name("test")
-                .description("testDescription")
-                .pageable(pageable)
-                .build();
+                                                                          .name("test")
+                                                                          .description("testDescription")
+                                                                          .pageable(pageable)
+                                                                          .build();
 
         // Act
         Page<UtilityStorage> actualPage = service.searchRecords(argument);
@@ -86,10 +86,10 @@ class UtilityStorageServiceTest {
         when(repository.findAll(any(BooleanBuilder.class), eq(pageable))).thenReturn(expectedPage);
 
         SearchUtilityRecordArgument argument = SearchUtilityRecordArgument.builder()
-                .name("test")
-                .description("testDescription")
-                .pageable(pageable)
-                .build();
+                                                                          .name("test")
+                                                                          .description("testDescription")
+                                                                          .pageable(pageable)
+                                                                          .build();
 
         // Act
         Page<UtilityStorage> actualPage = service.searchRecords(argument);

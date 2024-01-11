@@ -39,15 +39,14 @@ public class SecurityAuditAspect {
                 String userAgent = obtainUserAgent(attributes);
                 info = "IP: " + ipAddress + "; User-Agent: " + userAgent;
 
-            }
-            else {
+            } else {
                 info = "Не удалось получить";
             }
             CreateSecurityAuditArgument auditArgument = CreateSecurityAuditArgument.builder()
-                    .gradeId(gradeInstance.getId())
-                    .info(info)
-                    .createdAt(now())
-                    .build();
+                                                                                   .gradeId(gradeInstance.getId())
+                                                                                   .info(info)
+                                                                                   .createdAt(now())
+                                                                                   .build();
 
             service.create(auditArgument);
         }

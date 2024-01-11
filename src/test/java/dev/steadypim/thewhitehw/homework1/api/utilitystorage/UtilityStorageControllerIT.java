@@ -37,12 +37,12 @@ class UtilityStorageControllerIT {
     void findByIdTest() {
         //Act & Assert
         client.get()
-                .uri("/api/v1/utilityStorage/1")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$").isNotEmpty()
-                .jsonPath("$.id").isEqualTo(1);
+              .uri("/api/v1/utilityStorage/1")
+              .exchange()
+              .expectStatus().isOk()
+              .expectBody()
+              .jsonPath("$").isNotEmpty()
+              .jsonPath("$.id").isEqualTo(1);
 
     }
 
@@ -60,12 +60,12 @@ class UtilityStorageControllerIT {
 
         //Act & Assert
         client.post()
-                .uri("/api/v1/utilityStorage/create")
-                .contentType(APPLICATION_JSON)
-                .bodyValue(recordToCreate)
-                .exchange()
-                .expectStatus()
-                .isOk();
+              .uri("/api/v1/utilityStorage/create")
+              .contentType(APPLICATION_JSON)
+              .bodyValue(recordToCreate)
+              .exchange()
+              .expectStatus()
+              .isOk();
     }
 
     @Test
@@ -74,22 +74,22 @@ class UtilityStorageControllerIT {
     void searchTest() {
         //Act & Assert
         client.get().uri(uriBuilder -> uriBuilder
-                        .path("/api/v1/utilityStorage/search")
-                        .queryParam("name", "snusLover")
-                        .queryParam("description", "pipi-pupu")
-                        .queryParam("sort", "id,desc")
-                        .build())
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$").isNotEmpty()
-                .jsonPath("$.totalElements").isEqualTo(2)
-                .jsonPath("$.content[0].id").isEqualTo(2)
-                .jsonPath("$.content[0].name").isEqualTo("snusLover")
-                .jsonPath("$.content[0].description").isEqualTo("pipi-pupu")
-                .jsonPath("$.content[1].id").isEqualTo(1)
-                .jsonPath("$.content[1].name").isEqualTo("snusLover")
-                .jsonPath("$.content[1].description").isEqualTo("pipi-pupu");
+                      .path("/api/v1/utilityStorage/search")
+                      .queryParam("name", "snusLover")
+                      .queryParam("description", "pipi-pupu")
+                      .queryParam("sort", "id,desc")
+                      .build())
+              .exchange()
+              .expectStatus().isOk()
+              .expectBody()
+              .jsonPath("$").isNotEmpty()
+              .jsonPath("$.totalElements").isEqualTo(2)
+              .jsonPath("$.content[0].id").isEqualTo(2)
+              .jsonPath("$.content[0].name").isEqualTo("snusLover")
+              .jsonPath("$.content[0].description").isEqualTo("pipi-pupu")
+              .jsonPath("$.content[1].id").isEqualTo(1)
+              .jsonPath("$.content[1].name").isEqualTo("snusLover")
+              .jsonPath("$.content[1].description").isEqualTo("pipi-pupu");
     }
 
     @Test
@@ -101,9 +101,9 @@ class UtilityStorageControllerIT {
         int id = 1;
 
         client.delete()
-                .uri("/api/v1/utilityStorage/{id}", id)
-                .exchange()
-                .expectStatus().isOk();
+              .uri("/api/v1/utilityStorage/{id}", id)
+              .exchange()
+              .expectStatus().isOk();
     }
 
     @Test
@@ -119,10 +119,10 @@ class UtilityStorageControllerIT {
         );
 
         client.put()
-                .uri("/api/v1/utilityStorage/{id}", id)
-                .contentType(APPLICATION_JSON)
-                .bodyValue(recordToUpdate)
-                .exchange()
-                .expectStatus().isOk();
+              .uri("/api/v1/utilityStorage/{id}", id)
+              .contentType(APPLICATION_JSON)
+              .bodyValue(recordToUpdate)
+              .exchange()
+              .expectStatus().isOk();
     }
 }

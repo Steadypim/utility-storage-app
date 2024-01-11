@@ -25,7 +25,7 @@ public class UtilityStorageService {
     @Transactional(readOnly = true)
     public UtilityStorage findRecordById(int id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
+                         .orElseThrow(() -> new EntityNotFoundException("Запись не найдена"));
     }
 
     @Transactional(readOnly = true)
@@ -49,10 +49,10 @@ public class UtilityStorageService {
     @MethodForStatistics
     public UtilityStorage createRecord(CreateUtilityRecordArgument argument) {
         UtilityStorage record = UtilityStorage.builder()
-                .name(argument.getName())
-                .links(argument.getLinks())
-                .description(argument.getDescription())
-                .build();
+                                              .name(argument.getName())
+                                              .links(argument.getLinks())
+                                              .description(argument.getDescription())
+                                              .build();
         return repository.save(record);
     }
 
@@ -60,7 +60,7 @@ public class UtilityStorageService {
     @MethodForStatistics
     public void deleteRecordById(int id) {
         repository.delete(repository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Запись не найдена")));
+                                    orElseThrow(() -> new EntityNotFoundException("Запись не найдена")));
     }
 
     @Transactional
@@ -74,17 +74,17 @@ public class UtilityStorageService {
     }
 
     @Transactional(readOnly = true)
-    public Long getTotalRecords(){
+    public Long getTotalRecords() {
         return repository.count();
     }
 
     @Transactional(readOnly = true)
-    public Long countRecordsWithAverageGradeEqualsFive(){
+    public Long countRecordsWithAverageGradeEqualsFive() {
         return repository.countRecordsWithAverageGradeEqualsFive();
     }
 
     @Transactional(readOnly = true)
-    public Double percentageOfRecordsWithAverageGradeEqualsFive(){
+    public Double percentageOfRecordsWithAverageGradeEqualsFive() {
         long totalRecords = repository.count();
 
         long recordsWithAverageGradeEqualsFive = repository.countRecordsWithAverageGradeEqualsFive();
@@ -97,12 +97,12 @@ public class UtilityStorageService {
     }
 
     @Transactional(readOnly = true)
-    public Long countRecordsWithAverageGradeEqualsFourOrHigher(){
+    public Long countRecordsWithAverageGradeEqualsFourOrHigher() {
         return repository.countRecordsWithAverageGradeEqualsFourOrHigher();
     }
 
     @Transactional(readOnly = true)
-    public Double percentageOfRecordsWithAverageGradeFourOrHigher(){
+    public Double percentageOfRecordsWithAverageGradeFourOrHigher() {
         long totalRecords = repository.count();
 
         long recordsWithAverageGradeFourOrHigher = repository.countRecordsWithAverageGradeEqualsFourOrHigher();
@@ -115,12 +115,12 @@ public class UtilityStorageService {
     }
 
     @Transactional(readOnly = true)
-    public Long countRecordsWithoutGradesBelowFour(){
+    public Long countRecordsWithoutGradesBelowFour() {
         return repository.countRecordsWithoutGradesBelowFour();
     }
 
     @Transactional(readOnly = true)
-    public Double percentageRecordsWithoutGradesBelowFour(){
+    public Double percentageRecordsWithoutGradesBelowFour() {
         long totalRecords = repository.count();
 
         long recordsWithoutGradesBelowFour = repository.countRecordsWithoutGradesBelowFour();
@@ -133,7 +133,7 @@ public class UtilityStorageService {
     }
 
     @Transactional(readOnly = true)
-    public Long countRecordsWithoutGrades(){
+    public Long countRecordsWithoutGrades() {
         return repository.countRecordsWithoutGrades();
     }
 }

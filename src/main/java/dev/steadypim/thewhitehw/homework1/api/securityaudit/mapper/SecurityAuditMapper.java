@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
+
 @Mapper(componentModel = SPRING)
 public interface SecurityAuditMapper {
     SearchSecurityAuditArgument toSearchArgument(SecurityAuditSearchCriteriaDTO criteriaDTO, Pageable pageable);

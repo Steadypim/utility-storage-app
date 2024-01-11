@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.aspect;
 
-import dev.steadypim.thewhitehw.homework1.event.utilitystoragestatistics.StatisticsEvent;
+import dev.steadypim.thewhitehw.homework1.event.statistics.StatisticsEvent;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,7 +14,7 @@ public class MethodForStatisticsAspect {
     private final ApplicationEventPublisher eventPublisher;
 
     @After("@annotation(dev.steadypim.thewhitehw.homework1.annotation.MethodForStatistics)")
-    public void afterMethodForStatisticsExecution(){
+    public void afterMethodForStatisticsExecution() {
         eventPublisher.publishEvent(new StatisticsEvent("Update UtilityStorage statistics"));
     }
 }

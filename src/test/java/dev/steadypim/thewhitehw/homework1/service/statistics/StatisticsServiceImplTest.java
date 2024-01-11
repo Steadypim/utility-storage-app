@@ -44,7 +44,18 @@ class StatisticsServiceImplTest {
     @DisplayName("testUpdateStatisticsWhenStatisticsExistsThenUpdateStatistics")
     void testUpdateStatisticsWhenStatisticsExistsThenUpdateStatistics() {
         // Arrange
-        UpdateStatisticsArgument argument = UpdateStatisticsArgument.builder().build();
+        UpdateStatisticsArgument argument = UpdateStatisticsArgument.builder()
+                                                                    .totalRecords(20L)
+                                                                    .totalGrades(20L)
+                                                                    .numberOfRecordsWithAverageGradeFourOrHigher(8L)
+                                                                    .percentageOfRecordsWithAverageGradeFourOrHigher(1.0)
+                                                                    .numberOfRecordsWithoutGradesBelowFour(3L)
+                                                                    .percentageOfRecordsWithoutGradesBelowFour(23.0)
+                                                                    .numberOfRecordsWithMaxAverageGrade(4L)
+                                                                    .percentageOfRecordsWithMaxAverageGrade(51.0)
+                                                                    .numberOfRecordsWithoutGrades(4L)
+                                                                    .averageGradeOfEntireStorage(3.0)
+                                                                    .build();
         Statistics existingStatistics = new Statistics();
         when(statisticsRepository.findFirstByOrderByIdAsc()).thenReturn(existingStatistics);
 
@@ -54,16 +65,16 @@ class StatisticsServiceImplTest {
         // Assert
         verify(statisticsRepository).findFirstByOrderByIdAsc();
         verify(statisticsRepository).save(existingStatistics);
-        assertEquals(argument.totalRecords(), existingStatistics.getTotalRecords());
-        assertEquals(argument.totalGrades(), existingStatistics.getTotalGrades());
-        assertEquals(argument.averageGradeOfEntireStorage(), existingStatistics.getAverageGradeOfEntireStorage());
-        assertEquals(argument.numberOfRecordsWithMaxAverageGrade(), existingStatistics.getNumberOfRecordsWithMaxAverageGrade());
-        assertEquals(argument.percentageOfRecordsWithMaxAverageGrade(), existingStatistics.getPercentageOfRecordsWithMaxAverageGrade());
-        assertEquals(argument.numberOfRecordsWithAverageGradeFourOrHigher(), existingStatistics.getNumberOfRecordsWithAverageGradeFourOrHigher());
-        assertEquals(argument.percentageOfRecordsWithAverageGradeFourOrHigher(), existingStatistics.getPercentageOfRecordsWithAverageGradeFourOrHigher());
-        assertEquals(argument.numberOfRecordsWithoutGradesBelowFour(), existingStatistics.getNumberOfRecordsWithoutGradesBelowFour());
-        assertEquals(argument.percentageOfRecordsWithoutGradesBelowFour(), existingStatistics.getPercentageOfRecordsWithoutGradesBelowFour());
-        assertEquals(argument.numberOfRecordsWithoutGrades(), existingStatistics.getNumberOfRecordsWithoutGrades());
+        assertEquals(20L, existingStatistics.getTotalRecords());
+        assertEquals(20L, existingStatistics.getTotalGrades());
+        assertEquals(3.0, existingStatistics.getAverageGradeOfEntireStorage());
+        assertEquals(4L, existingStatistics.getNumberOfRecordsWithMaxAverageGrade());
+        assertEquals(51.0, existingStatistics.getPercentageOfRecordsWithMaxAverageGrade());
+        assertEquals(8L, existingStatistics.getNumberOfRecordsWithAverageGradeFourOrHigher());
+        assertEquals(1.0, existingStatistics.getPercentageOfRecordsWithAverageGradeFourOrHigher());
+        assertEquals(3L, existingStatistics.getNumberOfRecordsWithoutGradesBelowFour());
+        assertEquals(23.0, existingStatistics.getPercentageOfRecordsWithoutGradesBelowFour());
+        assertEquals(4L, existingStatistics.getNumberOfRecordsWithoutGrades());
     }
 
     @Test

@@ -5,5 +5,6 @@ import dev.steadypim.thewhitehw.homework1.service.utilitystoragestatistics.argum
 
 public interface StatisticsService {
     void updateStatistics(UpdateStatisticsArgument argument);
+
     Statistics getStatistics();
 }

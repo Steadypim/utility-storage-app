@@ -1,6 +1,6 @@
 package dev.steadypim.thewhitehw.homework1.action.update.utilitystoragestatistics;
 
-import dev.steadypim.thewhitehw.homework1.event.utilitystoragestatistics.StatisticsEvent;
+import dev.steadypim.thewhitehw.homework1.event.statistics.StatisticsEvent;
 import dev.steadypim.thewhitehw.homework1.service.grade.GradeService;
 import dev.steadypim.thewhitehw.homework1.service.utilitystorage.UtilityStorageService;
 import dev.steadypim.thewhitehw.homework1.service.utilitystoragestatistics.StatisticsService;
@@ -26,18 +26,18 @@ public class UpdateStatisticsAction {
     @EventListener
     @Async("statisticsExecutor")
     public void onStatisticsEvent(StatisticsEvent event) {
-        UpdateStatisticsArgument argument = UpdateStatisticsArgument.builder()
-                .totalRecords(utilityStorageService.getTotalRecords())
-                .totalGrades(gradeService.getTotalGrades())
-                .averageGradeOfEntireStorage(gradeService.countAverageGradeOfEntireStorage())
-                .numberOfRecordsWithMaxAverageGrade(utilityStorageService.countRecordsWithAverageGradeEqualsFive())
-                .percentageOfRecordsWithMaxAverageGrade(utilityStorageService.percentageOfRecordsWithAverageGradeEqualsFive())
-                .numberOfRecordsWithoutGradesBelowFour(utilityStorageService.countRecordsWithoutGradesBelowFour())
-                .percentageOfRecordsWithoutGradesBelowFour(utilityStorageService.percentageRecordsWithoutGradesBelowFour())
-                .numberOfRecordsWithAverageGradeFourOrHigher(utilityStorageService.countRecordsWithAverageGradeEqualsFourOrHigher())
-                .percentageOfRecordsWithAverageGradeFourOrHigher(utilityStorageService.percentageOfRecordsWithAverageGradeFourOrHigher())
-                .numberOfRecordsWithoutGrades(utilityStorageService.countRecordsWithoutGrades())
-                .build();
+        var argument = UpdateStatisticsArgument.builder()
+                                               .totalRecords(utilityStorageService.getTotalRecords())
+                                               .totalGrades(gradeService.getTotalGrades())
+                                               .averageGradeOfEntireStorage(gradeService.countAverageGradeOfEntireStorage())
+                                               .numberOfRecordsWithMaxAverageGrade(utilityStorageService.countRecordsWithAverageGradeEqualsFive())
+                                               .percentageOfRecordsWithMaxAverageGrade(utilityStorageService.percentageOfRecordsWithAverageGradeEqualsFive())
+                                               .numberOfRecordsWithoutGradesBelowFour(utilityStorageService.countRecordsWithoutGradesBelowFour())
+                                               .percentageOfRecordsWithoutGradesBelowFour(utilityStorageService.percentageRecordsWithoutGradesBelowFour())
+                                               .numberOfRecordsWithAverageGradeFourOrHigher(utilityStorageService.countRecordsWithAverageGradeEqualsFourOrHigher())
+                                               .percentageOfRecordsWithAverageGradeFourOrHigher(utilityStorageService.percentageOfRecordsWithAverageGradeFourOrHigher())
+                                               .numberOfRecordsWithoutGrades(utilityStorageService.countRecordsWithoutGrades())
+                                               .build();
 
         statisticsService.updateStatistics(argument);
 

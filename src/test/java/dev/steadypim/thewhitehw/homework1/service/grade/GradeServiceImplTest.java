@@ -34,15 +34,15 @@ class GradeServiceImplTest {
         // Arrange
         UtilityStorage mockUtilityStorage = new UtilityStorage();
         CreateGradeArgument argument = CreateGradeArgument.builder()
-                .utilityStorage(mockUtilityStorage)
-                .grade(5)
-                .comment("Excellent")
-                .build();
+                                                          .utilityStorage(mockUtilityStorage)
+                                                          .grade(5)
+                                                          .comment("Excellent")
+                                                          .build();
         Grade expectedGrade = Grade.builder()
-                .utilityStorage(mockUtilityStorage)
-                .grade(argument.getGrade())
-                .comment(argument.getComment())
-                .build();
+                                   .utilityStorage(mockUtilityStorage)
+                                   .grade(argument.getGrade())
+                                   .comment(argument.getComment())
+                                   .build();
         when(gradeRepository.save(any(Grade.class))).thenReturn(expectedGrade);
 
         // Act
@@ -78,10 +78,10 @@ class GradeServiceImplTest {
         when(gradeRepository.findAll(any(Predicate.class), any(Pageable.class))).thenReturn(expectedPage);
 
         SearchGradeArgument argument = SearchGradeArgument.builder()
-                .recordId(recordId)
-                .grade(gradeValue)
-                .pageable(pageable)
-                .build();
+                                                          .recordId(recordId)
+                                                          .grade(gradeValue)
+                                                          .pageable(pageable)
+                                                          .build();
 
         // Act
         Page<Grade> result = gradeService.searchGrades(argument);

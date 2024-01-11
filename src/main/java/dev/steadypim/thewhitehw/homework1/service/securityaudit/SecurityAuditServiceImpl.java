@@ -13,15 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class SecurityAuditServiceImpl implements SecurityAuditService{
+public class SecurityAuditServiceImpl implements SecurityAuditService {
 
     private final SecurityAuditRepository repository;
+
     @Override
     @Transactional(readOnly = true)
     public Page<SecurityAudit> searchSecurityAudit(SearchSecurityAuditArgument argument) {
         BooleanBuilder predicate = new BooleanBuilder();
 
-        if(argument.getInfo() != null){
+        if (argument.getInfo() != null) {
             predicate.and(QSecurityAudit.securityAudit.info.eq(argument.getInfo()));
         }
         return repository.findAll(predicate, argument.getPageable());
@@ -31,10 +32,10 @@ public class SecurityAuditServiceImpl implements SecurityAuditService{
     @Transactional
     public SecurityAudit create(CreateSecurityAuditArgument argument) {
         SecurityAudit audit = SecurityAudit.builder()
-                .gradeId(argument.getGradeId())
-                .info(argument.getInfo())
-                .createdAt(argument.getCreatedAt())
-                .build();
+                                           .gradeId(argument.getGradeId())
+                                           .info(argument.getInfo())
+                                           .createdAt(argument.getCreatedAt())
+                                           .build();
 
         return repository.save(audit);
     }

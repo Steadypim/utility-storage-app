@@ -23,10 +23,10 @@ public class GradeServiceImpl implements GradeService {
     @MethodForStatistics
     public Grade create(CreateGradeArgument argument) {
         Grade grade = Grade.builder()
-                .utilityStorage(argument.getUtilityStorage())
-                .comment(argument.getComment())
-                .grade(argument.getGrade())
-                .build();
+                           .utilityStorage(argument.getUtilityStorage())
+                           .comment(argument.getComment())
+                           .grade(argument.getGrade())
+                           .build();
         return repository.save(grade);
     }
 

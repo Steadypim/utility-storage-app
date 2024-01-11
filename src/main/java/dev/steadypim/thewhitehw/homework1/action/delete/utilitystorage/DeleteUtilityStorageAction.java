@@ -17,7 +17,7 @@ public class DeleteUtilityStorageAction {
     GradeService gradeService;
 
     @Transactional
-    public void delete(int id){
+    public void delete(int id) {
         gradeService.deleteAllByUtilityStorageId(id);
         utilityStorageService.deleteRecordById(id);
     }

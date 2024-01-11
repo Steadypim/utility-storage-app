@@ -21,7 +21,7 @@ public class StatisticsController {
 
     @GetMapping
     @Operation(description = "Получение статистики")
-    public StatisticsDTO getStatistics(){
+    public StatisticsDTO getStatistics() {
         return mapper.toDto(service.getStatistics());
     }
 }
